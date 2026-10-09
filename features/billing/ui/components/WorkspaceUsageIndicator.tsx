@@ -51,7 +51,7 @@ export function WorkspaceUsageDetails({
           </p>
         ) : usage?.tier === "free" ? (
           <p className="text-muted-foreground text-sm text-pretty">
-            Choose a plan to keep Agent running.
+            Ask the administrator for tester access.
           </p>
         ) : !usage || usage.used === null ? (
           <p className="text-muted-foreground text-sm text-pretty">
@@ -108,13 +108,6 @@ export function WorkspaceUsageDetails({
         )}
       </div>
       <div className="flex gap-2 border-t pt-3">
-        {usage && usage.limit !== -1 ? (
-          <Button asChild size="xs" className="flex-1">
-            <Link href={getPlansUpgradeHref()} onClick={onNavigate}>
-              Upgrade plan
-            </Link>
-          </Button>
-        ) : null}
         <Button asChild variant="outline" size="xs" className="flex-1">
           <Link href="/usage" onClick={onNavigate}>
             View usage
@@ -139,7 +132,7 @@ export function WorkspaceUsageIndicatorView({
   const label = unavailable
     ? "Usage unavailable. Open usage to try again"
     : usage?.tier === "free"
-      ? "Choose a plan to continue"
+      ? "Tester access required"
       : !usage || usage.used === null
         ? "Usage is being updated"
         : usage.limit === -1

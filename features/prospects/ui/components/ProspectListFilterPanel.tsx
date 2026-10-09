@@ -337,7 +337,7 @@ export function ProspectListFilterPanel({
                 <SelectContent>
                   <SelectItem value="all">All platforms</SelectItem>
                   <SelectItem value="twitter">X/Twitter</SelectItem>
-                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  
                 </SelectContent>
               </Select>
             </Section>

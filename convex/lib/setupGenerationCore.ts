@@ -227,7 +227,7 @@ ${buildGroundedDescriptionContext(args)}
 
 Create:
 1. A lightly edited improved description. Preserve all material meaning and facts; do not add or infer anything.
-2. One profile per distinct audience persona, with pain points, social channels, search signals, and two syntheticExamples: one X/Twitter and one LinkedIn. When the description names no audiences, infer plausible audience roles and work contexts from the product or goal. Respect explicit audience restrictions. Do not combine different personas, split by product benefits, or invent a quota.
+2. One profile per distinct audience persona, with pain points, social channels, search signals, and an empty syntheticExamples array. Use only Twitter channels and never invent example people. When the description names no audiences, infer plausible audience roles and work contexts from the product or goal. Respect explicit audience restrictions. Do not combine different personas, split by product benefits, or invent a quota.
 3. A machine-readable targetingSpec that preserves the user's exact requirements, preferences, exclusions, named products/companies, and observable intent.`;
 
   const preservedProfiles = getCurrentProfiles(args);

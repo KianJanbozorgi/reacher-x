@@ -2,7 +2,6 @@
 // Polar subscription management
 // @see https://www.convex.dev/components/polar
 
-import { Polar } from "@convex-dev/polar";
 import { api, components } from "./_generated/api";
 import { action, internalMutation, query } from "./lib/functionBuilders";
 import { v } from "convex/values";
@@ -28,93 +27,18 @@ import { getWideEventLogger } from "./lib/wideEventLogger";
  *
  * @see https://www.convex.dev/components/polar
  */
-export const polar = new Polar(components.polar, {
-  // Product keys for Polar's internal tracking (optional)
-  // We use product UUIDs directly in syncSubscriptionToUserPlan
-  products: {
-    hobbyMonthly: process.env.POLAR_PRODUCT_HOBBY_MONTHLY ?? "",
-    hobbyYearly: process.env.POLAR_PRODUCT_HOBBY_YEARLY ?? "",
-    baseMonthly: process.env.POLAR_PRODUCT_BASE_MONTHLY ?? "",
-    baseYearly: process.env.POLAR_PRODUCT_BASE_YEARLY ?? "",
-    proMonthly: process.env.POLAR_PRODUCT_PRO_MONTHLY ?? "",
-    proYearly: process.env.POLAR_PRODUCT_PRO_YEARLY ?? "",
-  },
-  // Provide user info for subscription lookups
-  getUserInfo: async (ctx) => {
-    const user: { _id: Id<"users">; email: string } = await ctx.runQuery(
-      api.polar.getCurrentUserInfo
-    );
-    return {
-      userId: user._id,
-      email: user.email,
-    };
-  },
-  // Config set via env vars (POLAR_ORGANIZATION_TOKEN, POLAR_WEBHOOK_SECRET, POLAR_SERVER)
-});
+// Compatibility for stored usage readers. This private app has no billing provider.
+export const polar = {
+  getCurrentSubscription: async (..._args: unknown[]): Promise<null> => null,
+};
 
-// ============================================================================
-// Export API Functions
-// ============================================================================
-
-/**
- * Exported API functions for frontend use.
- * @see https://www.convex.dev/components/polar#api-functions
- */
-export const {
-  // Get products configured by key
-  getConfiguredProducts,
-  // List all non-archived products
-  listAllProducts,
-  // Generate customer portal URL for subscription management
-  generateCustomerPortalUrl,
-  // Cancel current subscription
-  cancelCurrentSubscription,
-} = polar.api();
-
-/** Guard every public purchase entry point, including calls that bypass the UI. */
-export const generateCheckoutLink = action({
-  args: polarCheckoutArgs,
-  returns: v.object({ url: v.string() }),
-  handler: async (ctx, args) => {
-    assertProductOffersAvailable(args.productIds);
-    const user = await ctx.runQuery(api.polar.getCurrentUserInfo);
-    const userId = user._id;
-    const email = user.email;
-    const checkout = await polar.createCheckoutSession(
-      {
-        runQuery: (reference, ...[args]) => ctx.runQuery(reference, args),
-        runMutation: (reference, ...[args]) => ctx.runMutation(reference, args),
-      },
-      {
-        ...args,
-        userId,
-        email,
-      }
-    );
-    const url = new URL(checkout.url);
-    if (args.locale) url.searchParams.set("locale", args.locale);
-    return { url: url.toString() };
-  },
-});
-
-export const changeCurrentSubscription = action({
-  args: { productId: v.string() },
-  returns: v.null(),
-  handler: async (ctx, args) => {
-    assertProductOffersAvailable([args.productId]);
-    await polar.changeSubscription(
-      {
-        ...ctx,
-        runQuery: (reference, ...[queryArgs]) =>
-          ctx.runQuery(reference, queryArgs),
-        runMutation: (reference, ...[mutationArgs]) =>
-          ctx.runMutation(reference, mutationArgs),
-      },
-      args
-    );
-    return null;
-  },
-});
+export const getConfiguredProducts = query({ args: {}, handler: async () => ({}) });
+export const listAllProducts = query({ args: {}, handler: async () => [] });
+const billingDisabled = () => { throw new Error("Billing is disabled. Access is managed by the administrator."); };
+export const generateCustomerPortalUrl = action({ args: {}, handler: billingDisabled });
+export const cancelCurrentSubscription = action({ args: {}, handler: billingDisabled });
+export const generateCheckoutLink = action({ args: polarCheckoutArgs, handler: billingDisabled });
+export const changeCurrentSubscription = action({ args: { productId: v.string() }, handler: billingDisabled });
 
 // ============================================================================
 // Queries

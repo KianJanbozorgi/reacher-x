@@ -48,13 +48,13 @@ function mapSocialApiUser(rawUser: unknown): User | undefined {
   const createdAt = asString(rawUser.created_at);
   const profileImageUrl = asString(rawUser.profile_image_url_https);
 
-  if (!idStr || !name || !screenName || !createdAt || !profileImageUrl) {
+  if (!name || !screenName) {
     return undefined;
   }
 
   return {
-    id: asNumber(rawUser.id) ?? Number(idStr),
-    id_str: idStr,
+    id: asNumber(rawUser.id) ?? Number(idStr ?? 0),
+    id_str: idStr ?? "",
     name,
     screen_name: screenName,
     location: asString(rawUser.location),
@@ -67,9 +67,9 @@ function mapSocialApiUser(rawUser: unknown): User | undefined {
     listed_count: asNumber(rawUser.listed_count) ?? 0,
     favourites_count: asNumber(rawUser.favourites_count) ?? 0,
     statuses_count: asNumber(rawUser.statuses_count) ?? 0,
-    created_at: createdAt,
+    created_at: createdAt ?? "",
     profile_banner_url: asString(rawUser.profile_banner_url),
-    profile_image_url_https: profileImageUrl,
+    profile_image_url_https: profileImageUrl ?? "",
     can_dm: asBoolean(rawUser.can_dm),
   };
 }

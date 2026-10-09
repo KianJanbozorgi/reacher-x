@@ -1,4 +1,4 @@
-import { components, internal } from "../_generated/api";
+import { internal } from "../_generated/api";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx } from "../_generated/server";
 import type { PlanTier } from "./planConstants";
@@ -18,21 +18,10 @@ export async function refreshUserPlanFromBilling(
   ctx: MutationCtx,
   userId: Id<"users">
 ) {
-  const subscription = await ctx.runQuery(
-    components.polar.lib.getCurrentSubscription,
-    { userId }
-  );
-  const hasAccess = hasPolarPlanAccess(subscription?.status);
   await applyPlanTransition(ctx, {
     userId,
-    tier: hasAccess ? getPolarPlanTier(subscription?.productId) : "free",
-    subscription: hasAccess ? subscription : null,
-    externalSubscriptionId: hasAccess ? subscription?.id : undefined,
-    expiresAt:
-      hasAccess && subscription?.currentPeriodEnd
-        ? parseIsoToTimestamp(subscription.currentPeriodEnd)
-        : undefined,
-    polarCustomerId: hasAccess ? subscription?.customerId : undefined,
+    tier: "free",
+    subscription: null,
   });
 }
 

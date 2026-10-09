@@ -124,7 +124,7 @@ async function getSimilarProfilesForContext(
       params.set("cursor", args.cursor);
     }
     const queryString = params.toString();
-    const url = `https://api.socialapi.me/twitter/user/${encodeURIComponent(
+    const url = `https://socialapi.tech/twitter/user/${encodeURIComponent(
       userId
     )}/similar${queryString ? `?${queryString}` : ""}`;
 

@@ -129,6 +129,7 @@ export async function requestLinkdApiData<T>(
     consumer: string;
   }
 ): Promise<T> {
+  assertLinkedInEnabled();
   await acquireLinkdApiBudget(ctx, args.consumer);
 
   const request = {
@@ -220,3 +221,5 @@ export async function requestLinkdApiData<T>(
     throw error;
   }
 }
+
+function assertLinkedInEnabled(): void { throw new Error("LinkedIn is disabled in this Twitter-only application."); }

@@ -6,7 +6,6 @@ import agent from "@convex-dev/agent/convex.config";
 import actionRetrier from "@convex-dev/action-retrier/convex.config";
 import workpool from "@convex-dev/workpool/convex.config";
 import rag from "@convex-dev/rag/convex.config";
-import polar from "@convex-dev/polar/convex.config";
 import migrations from "@convex-dev/migrations/convex.config";
 import batchWorker from "@convex-dev/batch-worker/convex.config";
 import rateLimiter from "@convex-dev/rate-limiter/convex.config";
@@ -118,6 +117,5 @@ app.use(workpool, { name: "tenantExecutionPool" });
 // RAG for semantic search in outreach
 app.use(rag);
 // Polar for subscription payments
-app.use(polar);
 
 export default app;

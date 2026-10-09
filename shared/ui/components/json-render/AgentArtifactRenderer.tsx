@@ -31,7 +31,6 @@ import { InlineAttachmentPreview } from "@/features/agent/ui/components/InlineAt
 import { BlogCard } from "@/features/blog/ui/components/BlogCard";
 import { BlogCardSkeleton } from "@/features/blog/ui/components/BlogCardSkeleton";
 import { BlogAuthorDetails } from "@/features/blog/ui/components/BlogAuthorDetails";
-import { BlogAppDemo } from "@/features/blog/ui/components/app-demo/BlogAppDemo";
 import {
   isBlogDemoId,
   type BlogDemoId,
@@ -953,31 +952,6 @@ function BlogCardArtifactCard({
   );
 }
 
-function BlogDemoArtifactCard({
-  props,
-}: {
-  props: {
-    scenario: string;
-    title: string;
-    caption: string;
-    sceneRange?: readonly [number, number];
-  };
-}) {
-  if (!isBlogDemoId(props.scenario)) {
-    return null;
-  }
-
-  return (
-    <BlogAppDemo
-      scenario={props.scenario as BlogDemoId}
-      title={props.title}
-      caption={props.caption}
-      sceneRange={props.sceneRange}
-      interaction="inline"
-    />
-  );
-}
-
 const { registry } = defineRegistry(agentArtifactCatalog, {
   components: {
     OnboardingCard: ({ props }) => (
@@ -1005,7 +979,7 @@ const { registry } = defineRegistry(agentArtifactCatalog, {
       <InlineAttachmentPreview attachments={props.attachments} />
     ),
     BlogCardArtifact: ({ props }) => <BlogCardArtifactCard props={props} />,
-    BlogDemoArtifact: ({ props }) => <BlogDemoArtifactCard props={props} />,
+    BlogDemoArtifact: () => null,
   },
 });
 

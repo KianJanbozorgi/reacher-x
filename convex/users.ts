@@ -1,3 +1,5 @@
+import { replaceComplimentaryGrant } from "./lib/planGrantCore";
+import { refreshUserPlanFromBilling } from "./lib/planTransitionCore";
 import { internalQuery, mutation, query } from "./lib/functionBuilders";
 import { getCurrentUTCTimestamp } from "../shared/lib/utils/time/timeUtils";
 import {
@@ -53,7 +55,7 @@ export const createOrUpdateUser = mutation({
     if (existingUser) {
       // Update existing user
       await ctx.db.patch(existingUser._id, {
-        email: args.email,
+        email: identity.email!,
         firstName: args.firstName,
         lastName: args.lastName,
         profileImageUrl: args.profileImageUrl,
@@ -62,13 +64,16 @@ export const createOrUpdateUser = mutation({
       return existingUser._id;
     } else {
       // Create new user
-      return ctx.db.insert("users", {
+      const userId = await ctx.db.insert("users", {
         workosUserId: args.workosUserId,
-        email: args.email,
+        email: identity.email!,
         firstName: args.firstName,
         lastName: args.lastName,
         profileImageUrl: args.profileImageUrl,
       });
+      await replaceComplimentaryGrant(ctx, { userId, tier: "base" });
+      await refreshUserPlanFromBilling(ctx, userId);
+      return userId;
     }
   },
 });

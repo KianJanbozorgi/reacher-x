@@ -1,4 +1,3 @@
-import { BlogAppDemo } from "@/features/blog/ui/components/app-demo/BlogAppDemo";
 import { BlogVideo } from "@/features/blog/ui/components/BlogVideo";
 import { BlogGif } from "@/features/blog/ui/components/BlogGif";
 import type { MDXComponents } from "mdx/types";
@@ -39,7 +38,7 @@ const components: MDXComponents = {
   a: BlogAnchor,
   BlogImage,
   BlogMediaPlaceholder,
-  BlogAppDemo,
+  BlogAppDemo: () => null,
   BlogVideo,
   BlogGif,
   BlogCallout,

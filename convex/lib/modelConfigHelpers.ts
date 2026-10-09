@@ -24,5 +24,7 @@ export function getConfiguredModel(
   source: ModelEnvironment = env
 ): string {
   const configuredModel = source[key]?.trim();
+  if (key === "AI_TEXT_EMBEDDING_MODEL") return "hiknow-embedding-small";
+  if (key !== "AI_JEV_MODEL") return "hiknow-flash-lite";
   return configuredModel || fallback;
 }

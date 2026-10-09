@@ -333,6 +333,7 @@ function normalizeBaseUrl(raw: string): string {
 }
 
 export function getUnipileBaseUrl(): string {
+  assertLinkedInEnabled();
   const raw = getEnvValue("UNIPILE_BASE_URL", "UNIPILE_API_URL", "UNIPILE_DSN");
   if (!raw) {
     throw new Error(
@@ -366,6 +367,7 @@ export function shouldRefreshUnipileClientCache(
 }
 
 function getUnipileClient() {
+  assertLinkedInEnabled();
   const config = {
     baseUrl: getUnipileBaseUrl(),
     apiKey: getUnipileApiKey(),
@@ -1304,3 +1306,5 @@ export async function deleteUnipileWebhook(webhookId: string) {
     method: "DELETE",
   });
 }
+
+function assertLinkedInEnabled(): void { throw new Error("LinkedIn is disabled in this Twitter-only application."); }

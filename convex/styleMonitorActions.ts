@@ -17,7 +17,7 @@ import { logger } from "../shared/lib/logger";
 // Constants
 // ============================================================================
 
-const SOCIALAPI_BASE_URL = "https://api.socialapi.me";
+const SOCIALAPI_BASE_URL = "https://socialapi.tech";
 const styleMonitorLogger = logger.withScope("StyleMonitorActions");
 
 // ============================================================================

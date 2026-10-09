@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   // Next.js 16: Enable Cache Components (PPR + "use cache" directive)
   cacheComponents: true,
 

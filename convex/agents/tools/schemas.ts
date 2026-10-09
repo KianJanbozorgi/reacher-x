@@ -13,32 +13,15 @@ import { hasSyntheticProfileExamples } from "../../lib/syntheticProfileCore";
  * Used by createWorkspace and updateWorkspace tools.
  */
 /** Mirrors syntheticProfileExampleValidator; required only for new generation. */
-export const syntheticProfileExamplesSchema = z
-  .array(
-    z.object({
-      platform: z.enum(["twitter", "linkedin"]),
-      displayName: z.string().min(1).max(80),
-      title: z.string().min(1).max(160),
-      bio: z.string().min(1).max(300),
-    })
-  )
-  .length(2)
-  .refine(
-    (syntheticExamples) => hasSyntheticProfileExamples({ syntheticExamples }),
-    {
-      message:
-        "Return one Twitter example (bio at most 160 characters) and one LinkedIn example (bio at most 300 characters), with nonblank names, titles, and bios.",
-    }
-  )
-  .describe(
-    "Exactly two fictional profiles of this ONE persona: one twitter and one linkedin. Natural first-person social bios, not qualification summaries. No real identities, links, or contact information."
-  );
+export const syntheticProfileExamplesSchema = z.array(z.object({
+  platform: z.literal("twitter"), displayName: z.string(), title: z.string(), bio: z.string(),
+})).length(0).default([]).describe("Empty: this application does not generate fictional people.");
 
 export const icpSchema = z.object({
   title: z.string().describe("ICP segment title"),
   description: z.string().describe("Who this segment is"),
   painPoints: z.array(z.string()).describe("Their pain points"),
-  channels: z.array(z.string()).describe("Where to find them"),
+  channels: z.array(z.literal("Twitter")).length(1),
   syntheticExamples: syntheticProfileExamplesSchema,
   // Synthetic posts: realistic tweets/posts this ICP would write (stored permanently)
   syntheticPosts: z
@@ -46,7 +29,7 @@ export const icpSchema = z.object({
     .min(5)
     .max(10)
     .describe(
-      "5-10 realistic tweets/posts this ICP would write expressing pain points"
+      "5-10 Twitter search seed phrases describing this audience and its needs; not invented posts"
     ),
   // Keywords for qualification evidence search (derived from syntheticPosts)
   qualificationKeywords: z

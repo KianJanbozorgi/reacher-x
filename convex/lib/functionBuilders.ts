@@ -1,3 +1,4 @@
+import { isPrivateUser } from "../../shared/lib/privateAccess";
 import {
   action as rawAction,
   httpAction,
@@ -27,7 +28,16 @@ const withTriggerAwareDb = customCtx<MutationCtx, Pick<MutationCtx, "db">>(
   })
 );
 
-export const query = customQuery(rawQuery, NoOp);
+const privateAccess = customCtx(async (ctx: { auth: { getUserIdentity: () => Promise<{ email?: string } | null> } }) => {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) throw new Error("Please sign in to continue.");
+  if (!isPrivateUser(identity.email, process.env.PRIVATE_ALLOWED_EMAILS)) {
+    throw new Error("This application is private. Contact the administrator for access.");
+  }
+  return {};
+});
+
+export const query = customQuery(rawQuery, privateAccess);
 export const internalQuery = customQuery(rawInternalQuery, NoOp);
 
 type BuilderLike = (registration: any) => any;
@@ -149,7 +159,13 @@ function wrapFunctionBuilderWithWideEventLogging<TBuilder extends BuilderLike>(
 // All public and internal mutations must flow through the shared wrapper so
 // future trigger registrations stay consistent across the repo.
 export const mutation = wrapFunctionBuilderWithWideEventLogging(
-  customMutation(rawMutation, withTriggerAwareDb),
+  customMutation(rawMutation, customCtx(async (ctx: MutationCtx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!isPrivateUser(identity?.email, process.env.PRIVATE_ALLOWED_EMAILS)) {
+      throw new Error("This application is private. Please sign in with an authorized account.");
+    }
+    return { db: triggers.wrapDB(ctx).db };
+  })),
   "mutation"
 );
 export const internalMutation = wrapFunctionBuilderWithWideEventLogging(
@@ -158,7 +174,7 @@ export const internalMutation = wrapFunctionBuilderWithWideEventLogging(
 );
 
 export const action = wrapFunctionBuilderWithWideEventLogging(
-  customAction(rawAction, NoOp),
+  customAction(rawAction, privateAccess),
   "action"
 );
 export const internalAction = wrapFunctionBuilderWithWideEventLogging(

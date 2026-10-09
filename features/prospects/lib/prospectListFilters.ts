@@ -51,7 +51,7 @@ export function cloneProspectListFilters(
         }
       : undefined,
     prospectType: filters.prospectType,
-    platform: filters.platform,
+    platform: "twitter",
   };
 }
 
@@ -63,7 +63,7 @@ export function createDefaultProspectListFilters(
     datePreset: "all_time",
     customDateRange: undefined,
     prospectType: "both",
-    platform: "all",
+    platform: "twitter",
   };
 }
 

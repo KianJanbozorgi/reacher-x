@@ -73,7 +73,7 @@ export const getThread = internalAction({
 
     try {
       const url = new URL(
-        `https://api.socialapi.me/twitter/thread/${args.threadId}`
+        `https://socialapi.tech/twitter/thread/${args.threadId}`
       );
       if (args.cursor) {
         url.searchParams.set("cursor", args.cursor);

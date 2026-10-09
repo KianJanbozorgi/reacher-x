@@ -1,3 +1,4 @@
+import { fetchSocialApiTech } from "./socialApiTech";
 import type { Id } from "../_generated/dataModel";
 import type { ActionCtx } from "../_generated/server";
 import { acquireSocialApiBudget } from "./socialApiBudget";
@@ -69,7 +70,7 @@ export async function fetchSocialApi(
   let failureRecorded = false;
 
   try {
-    const response = await fetch(input, init);
+    const response = await fetchSocialApiTech(input, init);
     let payload: unknown;
     try {
       payload = await response.clone().json();

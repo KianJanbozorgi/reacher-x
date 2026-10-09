@@ -43,7 +43,7 @@ export function SetupOnboardingInlineCard({
   if (errorMessage)
     return (
       <InlineProgressCard
-        title={`Couldn't generate example ${entities}`}
+        title={`Couldn't generate targeting criteria`}
         progress={0}
         className={className}
         status={
@@ -63,7 +63,7 @@ export function SetupOnboardingInlineCard({
   if (inputPhase === "generating_icps")
     return (
       <InlineProgressCard
-        title={`Creating example ${entities}`}
+        title={`Creating targeting criteria`}
         progress={45}
         className={className}
         footerAction={
@@ -81,13 +81,10 @@ export function SetupOnboardingInlineCard({
       />
     );
   const reviewing = inputPhase === "awaiting_icp_approval";
-  const count = generatedProfiles.reduce(
-    (total, profile) => total + (profile.syntheticExamples?.length ?? 0),
-    0
-  );
+  const count = generatedProfiles.length;
   return (
     <InlineProgressCard
-      title={reviewing ? `Example ${entities}` : title}
+      title={reviewing ? `Targeting criteria` : title}
       progress={reviewing ? 100 : (stepNumber / Math.max(1, stepTotal)) * 100}
       className={className}
       status={

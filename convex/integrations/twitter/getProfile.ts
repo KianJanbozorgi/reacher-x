@@ -115,7 +115,7 @@ export const getProfile = internalAction({
 
     try {
       // Fetch main profile
-      const profileUrl = `https://api.socialapi.me/twitter/user/${identifier}`;
+      const profileUrl = `https://socialapi.tech/twitter/user/${identifier}`;
       const profileResponse = await fetchSocialApi(
         ctx,
         "twitter.getProfile.profile",
@@ -147,36 +147,7 @@ export const getProfile = internalAction({
       // Optionally fetch extended bio
       let extendedBio: string | undefined;
 
-      if (args.includeExtendedBio && args.username) {
-        try {
-          const extendedBioUrl = `https://api.socialapi.me/twitter/user/${args.username}/extended-bio`;
-          const extendedBioResponse = await fetchSocialApi(
-            ctx,
-            "twitter.getProfile.extendedBio",
-            extendedBioUrl,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${apiKey}`,
-                Accept: "application/json",
-              },
-            }
-          );
-
-          if (extendedBioResponse.ok) {
-            const extendedBioData: ExtendedBioResponse =
-              await extendedBioResponse.json();
-            extendedBio = parseExtendedBio(extendedBioData);
-          }
-          // Don't fail if extended bio is not available
-        } catch (extError) {
-          twitterProfileLogger.warn(
-            "Extended bio fetch failed",
-            { username: args.username },
-            extError
-          );
-        }
-      }
+      // SocialAPI.tech has no documented extended-bio endpoint.
 
       return {
         success: true,

@@ -224,7 +224,7 @@ export const searchInternal = internalAction({
       params.set("cursor", args.cursor);
     }
 
-    const url = `https://api.socialapi.me/twitter/search?${params.toString()}`;
+    const url = `https://socialapi.tech/twitter/search?${params.toString()}`;
 
     const response = await fetchSocialApi(
       ctx,

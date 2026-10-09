@@ -40,7 +40,7 @@ import {
   normalizeLinkedInActorIdentifier,
 } from "./lib/prospectInteractionSyncCore";
 
-const SOCIALAPI_BASE_URL = "https://api.socialapi.me";
+const SOCIALAPI_BASE_URL = "https://socialapi.tech";
 const INTERACTION_REFRESH_COOLDOWN_MS = 60_000;
 const SOCIALAPI_SEARCH_PAGE_LIMIT = 2;
 const SOCIALAPI_TIMELINE_PAGE_LIMIT = 2;

@@ -2,7 +2,7 @@
 // OpenRouter provider setup for Convex actions
 // Docs: https://openrouter.ai/docs
 
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createHiknowProvider } from "./hiknow";
 import {
   generateText,
   NoObjectGeneratedError,
@@ -58,26 +58,7 @@ export { StructuredGenerationError } from "./structuredOutputCore";
  * });
  * ```
  */
-export function createAIProvider() {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-
-  if (!apiKey) {
-    throw new Error(
-      "[AI] Missing OPENROUTER_API_KEY environment variable. " +
-        "Get it from: https://openrouter.ai/settings/keys"
-    );
-  }
-
-  return createOpenRouter({
-    apiKey,
-    // App attribution for OpenRouter analytics
-    // https://openrouter.ai/docs/app-attribution
-    headers: {
-      "HTTP-Referer": "https://reacherx.com",
-      "X-Title": "ReacherX",
-    },
-  });
-}
+export const createAIProvider = createHiknowProvider;
 
 // ============================================================================
 // Model Identifiers

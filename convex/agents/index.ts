@@ -6,7 +6,7 @@
 import { Agent } from "@convex-dev/agent";
 import { stepCountIs, wrapLanguageModel } from "ai";
 import { components, internal } from "../_generated/api";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createHiknowProvider } from "../lib/hiknow";
 import {
   type OpenRouterProviderOptions,
   OUTREACH_AGENT_MODEL,
@@ -74,24 +74,7 @@ import { webResearch } from "./tools/webResearch";
  * - Provider routing
  * - Tool calling support
  */
-function getOpenRouterProvider() {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) {
-    throw new Error(
-      "[Agent] Missing OPENROUTER_API_KEY environment variable. " +
-        "Get it from: https://openrouter.ai/settings/keys"
-    );
-  }
-  return createOpenRouter({
-    apiKey,
-    headers: {
-      "HTTP-Referer": "https://reacherx.com",
-      "X-Title": "ReacherX",
-    },
-  });
-}
-
-const openrouter = getOpenRouterProvider();
+const openrouter = createHiknowProvider();
 function createWorkspaceLanguageModel(
   modelId: string,
   providerOptions: OpenRouterProviderOptions

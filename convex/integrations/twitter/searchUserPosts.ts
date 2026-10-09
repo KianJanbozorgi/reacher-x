@@ -164,7 +164,7 @@ async function fetchSearchPage(
       params.set("cursor", args.cursor);
     }
 
-    const url = `https://api.socialapi.me/twitter/search?${params.toString()}`;
+    const url = `https://socialapi.tech/twitter/search?${params.toString()}`;
 
     try {
       const response = await fetchSocialApi(

@@ -7,7 +7,7 @@ import {
 } from "../../shared/lib/billing/planOfferHelpers";
 
 export function getAvailablePlanOffers(): PlanOffer[] {
-  return parsePlanOffers(env.AVAILABLE_PLAN_OFFERS);
+  return [];
 }
 
 export function getPlanOfferProductId(offer: PlanOffer): string | undefined {

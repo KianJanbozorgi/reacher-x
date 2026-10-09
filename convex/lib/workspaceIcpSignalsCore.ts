@@ -49,7 +49,6 @@ export function hasWorkspaceIcpGeneratedSignals(
   >
 ): boolean {
   return (
-    hasSyntheticProfileExamples(icp) &&
     Array.isArray(icp.syntheticPosts) &&
     icp.syntheticPosts.length > 0 &&
     Array.isArray(icp.qualificationKeywords) &&

@@ -35,7 +35,7 @@ import {
 } from "./lib/linkedinOutreachPlanCore";
 import { linkedInRecoveryCandidateValidator } from "./validators";
 
-const SOCIALAPI_BASE_URL = "https://api.socialapi.me";
+const SOCIALAPI_BASE_URL = "https://socialapi.tech";
 const RESPONSE_MONITOR_WINDOW_MS = 14 * 24 * 60 * 60 * 1000;
 const LINKEDIN_CONNECTION_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 const internalRecovery = (internal as any).outreachRecovery;
