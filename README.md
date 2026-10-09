@@ -30,6 +30,10 @@ In this cloud workspace, set `DOCKER_CONFIG=/workspace/.docker` for Docker comma
 
 Visit `http://localhost:3000`; WorkOS redirects unauthenticated users to sign in. The email in `PRIVATE_ALLOWED_EMAILS` receives a base complimentary tester grant when its account is first created. For an existing user, grant access from an authorized Convex CLI session with `pnpm exec convex run testerPlans:grantTesterPlanByEmail '{"email":"user@example.com","tier":"base","durationDays":30}'`. This retains the plan's workspace and prospect usage limits. No Polar variables or checkout are needed.
 
+`localhost` is the machine running Docker. For a cloud Docker host, use its forwarded or public HTTPS URL in the browser, set `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_WORKOS_REDIRECT_URI` to that URL, register the redirect URI in WorkOS, then rebuild the frontend image. The container alone does not expose a cloud workspace to another computer.
+
+For a public Docker server, point a hostname at the server, allow ports 80 and 443, and set `APP_DOMAIN` to that hostname. Set `NEXT_PUBLIC_SITE_URL=https://HOSTNAME` and `NEXT_PUBLIC_WORKOS_REDIRECT_URI=https://HOSTNAME/callback` before `pnpm build`. Then run `docker compose --env-file .env.local -f compose.yaml -f compose.production.yaml up --build -d`. Caddy obtains and renews the HTTPS certificate. Register the same callback URI in the WorkOS application.
+
 ## Provider contract
 
 [SocialAPI.tech documentation](https://socialapi.tech/docs) specifies `https://socialapi.tech/v1`, `X-API-Key`, and `{status, data, meta}`. Search uses `/search/advanced?query=...&product=Latest&limit=20`. Profile, timeline, thread, and relationship reads use the documented `/user/*` and `/tweet/thread` paths. Search has no documented cursor, so each query fetches one page. The old SocialAPI.me similar-profile lookup, webhook monitors, extended bio, and retweet/comment verification have no documented direct equivalents and are disabled. The app does not use SocialAPI.tech's WebSocket stream.

@@ -154,6 +154,17 @@ export const socialAction = createTool({
     "Execute or stage a curated social action using ReacherX policy controls. Use this for X/Twitter likes, bookmarks, reposts, follows, replies, posts, and DMs, plus LinkedIn messages, invitations, reactions, and comments. Low-risk actions may execute immediately. Medium and high-risk actions create a durable approval request instead of executing directly.",
   inputSchema: socialActionArgsSchema,
   execute: async (ctx, args): Promise<SocialActionToolResult> => {
+    if (args.action.startsWith("linkedin_")) {
+      return {
+        success: false,
+        executed: false,
+        pendingApproval: false,
+        actionKey: args.action,
+        title: "Action unavailable",
+        message: "This application supports X/Twitter only.",
+        error: "LinkedIn actions are disabled",
+      };
+    }
     if (!ctx.threadId) {
       return {
         success: false,

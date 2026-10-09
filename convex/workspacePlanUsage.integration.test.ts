@@ -204,12 +204,12 @@ describe("workspace plan usage", () => {
   });
   test("rejects anonymous and cross-workspace dismissal and never leaks usage", async () => {
     const { t, owner, workspaceId, otherWorkspaceId } = await fixture();
-    expect(
-      await t.query(api.workspacePlanUsage.getCurrent, {
+    await expect(
+      t.query(api.workspacePlanUsage.getCurrent, {
         workspaceId,
         nowMs: now,
       })
-    ).toBeNull();
+    ).rejects.toThrow("Please sign in");
     expect(
       await owner.query(api.workspacePlanUsage.getCurrent, {
         workspaceId: otherWorkspaceId,
@@ -221,7 +221,7 @@ describe("workspace plan usage", () => {
         workspaceId,
         noticeKey: "fake",
       })
-    ).rejects.toThrow("Not authenticated");
+    ).rejects.toThrow("Please sign in");
     await expect(
       owner.mutation(api.workspacePlanUsage.dismissNotice, {
         workspaceId: otherWorkspaceId,
