@@ -50,6 +50,7 @@ export const TweetBody: React.FC<TweetBodyProps> = ({
           Replying to{" "}
           <button
             type="button"
+            dir="ltr"
             className="text-foreground font-mono hover:underline"
             onClick={(e) => {
               e.stopPropagation();
@@ -65,7 +66,7 @@ export const TweetBody: React.FC<TweetBodyProps> = ({
 
       {/* Body */}
       <p
-        lang="auto"
+        dir="auto"
         className={cn(
           "word-break [&_a]:text-muted-foreground text-sm hyphens-auto whitespace-pre-line [&_a]:hover:underline dark:[&_a]:text-neutral-400",
           bodyLineClamp

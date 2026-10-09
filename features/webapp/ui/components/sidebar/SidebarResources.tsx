@@ -41,7 +41,7 @@ export function SidebarResources() {
                 <SidebarMenuButton tooltip="Get started">
                   <DeveloperGuideIcon className="fill-sidebar-foreground" />
                   <span className="truncate">Get started</span>
-                  <ChevronRightIcon className="fill-sidebar-foreground ml-auto transition-transform" />
+                  <ChevronRightIcon className="fill-sidebar-foreground ms-auto rotate-180 transition-transform" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { AppErrorState } from "@/shared/ui/components/AppErrorState";
 import { logger } from "@/shared/lib/logger";
-import { geistMono, geistPixelSquare, geistSans } from "./fonts";
+import { geistMono, geistPixelSquare, vazirmatn } from "./fonts";
 import "./globals.css";
 
 const globalErrorLogger = logger.withScope("GlobalError");
@@ -20,10 +20,10 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="rtl" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${geistPixelSquare.variable} bg-background text-foreground antialiased`}
+        className={`${vazirmatn.variable} ${geistMono.variable} ${geistPixelSquare.variable} bg-background text-foreground antialiased`}
       >
         <title>Couldn’t load ReacherX | ReacherX</title>
         <main className="flex min-h-screen items-center justify-center">

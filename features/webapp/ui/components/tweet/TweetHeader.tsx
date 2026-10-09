@@ -55,6 +55,7 @@ export function TweetHeader({
             {user.name &&
               (readOnly ? (
                 <span
+                  dir="auto"
                   className={cn(
                     nameClass,
                     "mr-0 block max-w-24 min-w-0 truncate font-medium md:max-w-56"
@@ -66,6 +67,7 @@ export function TweetHeader({
               ) : (
                 <button
                   type="button"
+                  dir="auto"
                   className={cn(
                     nameClass,
                     "ease-[cubic-bezier(0.25, 1, 0.5, 1)] mr-0 block max-w-24 min-w-0 truncate font-medium duration-300 hover:underline md:max-w-56"
@@ -100,6 +102,7 @@ export function TweetHeader({
             {user.screen_name &&
               (readOnly ? (
                 <span
+                  dir="ltr"
                   className={cn(
                     screenNameClass,
                     "text-muted-foreground block max-w-16 min-w-0 shrink grow-0 truncate font-mono font-medium"
@@ -111,6 +114,7 @@ export function TweetHeader({
               ) : (
                 <button
                   type="button"
+                  dir="ltr"
                   className={cn(
                     screenNameClass,
                     "ease-[cubic-bezier(0.25, 1, 0.5, 1)] md:max-w-auto text-muted-foreground block max-w-16 min-w-0 shrink grow-0 truncate font-mono font-medium duration-300 hover:underline"

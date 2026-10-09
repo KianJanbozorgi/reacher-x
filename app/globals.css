@@ -7,7 +7,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-vazirmatn);
   --font-mono: var(--font-geist-mono);
   --font-pixel-square: var(--font-geist-pixel-square);
 
@@ -314,8 +314,8 @@
 }
 
 body {
-  font-family: var(--font-geist-sans), sans-serif;
-  line-height: 1.2em;
+  font-family: var(--font-vazirmatn), sans-serif;
+  line-height: 1.5;
 }
 
 .rx-code-block .shiki,

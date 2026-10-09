@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { DirectionProvider } from "@radix-ui/react-direction";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { PostHogProvider } from "./PostHogProvider";
@@ -11,7 +12,7 @@ import { Toaster } from "@/shared/ui/components/Sonner";
 import MediaChromeYTTemplate from "@/shared/ui/components/MediaChromeYTTemplate";
 import { BackendStatusBanner } from "@/shared/ui/components/BackendStatusBanner";
 import { isBackendStatusBannerEnabled } from "@/shared/lib/backendStatusBanner";
-import { geistSans, geistMono, geistPixelSquare } from "./fonts";
+import { geistMono, geistPixelSquare, vazirmatn } from "./fonts";
 import "./globals.css";
 import "@/features/blog/ui/blog.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -85,6 +86,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      dir="rtl"
       suppressHydrationWarning
       data-backend-status-banner={backendStatusBanner ? "" : undefined}
     >
@@ -110,7 +112,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${geistPixelSquare.variable} antialiased`}
+        className={`${vazirmatn.variable} ${geistMono.variable} ${geistPixelSquare.variable} antialiased`}
       >
         <noscript>
           <nav aria-label="Read without JavaScript" className="p-6">
@@ -131,25 +133,27 @@ export default function RootLayout({
             </ul>
           </nav>
         </noscript>
-        <PostHogProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <NuqsAdapter>
-              <BackendStatusBanner />
-              <MediaChromeYTTemplate />
-              <Suspense fallback={null}>
-                <ConvexClientProvider>{children}</ConvexClientProvider>
-              </Suspense>
-              <Toaster />
-              <Analytics />
-              <SpeedInsights />
-            </NuqsAdapter>
-          </ThemeProvider>
-        </PostHogProvider>
+        <DirectionProvider dir="rtl">
+          <PostHogProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <NuqsAdapter>
+                <BackendStatusBanner />
+                <MediaChromeYTTemplate />
+                <Suspense fallback={null}>
+                  <ConvexClientProvider>{children}</ConvexClientProvider>
+                </Suspense>
+                <Toaster />
+                <Analytics />
+                <SpeedInsights />
+              </NuqsAdapter>
+            </ThemeProvider>
+          </PostHogProvider>
+        </DirectionProvider>
       </body>
     </html>
   );

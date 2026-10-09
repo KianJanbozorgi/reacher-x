@@ -261,7 +261,7 @@ export function SidebarNavigation() {
                   <SidebarMenuButton tooltip="Settings" disabled={locked}>
                     <SettingsIcon className="fill-sidebar-foreground" />
                     <span className="truncate">Settings</span>
-                    <ChevronRightIcon className="fill-sidebar-foreground ml-auto transition-transform" />
+                    <ChevronRightIcon className="fill-sidebar-foreground ms-auto rotate-180 transition-transform" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>

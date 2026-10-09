@@ -2,6 +2,8 @@
 
 This instance finds opportunities from public X/Twitter posts for authorized testers. Authentication uses WorkOS; data, jobs, and usage limits live in Convex. There is no LinkedIn, billing checkout, or demo app.
 
+The interface uses RTL layout and a locally bundled [Vazirmatn](https://github.com/rastikerdar/vazirmatn) variable font. Its SIL Open Font License is stored alongside the font in `app/assets/fonts/OFL.txt`.
+
 ## Start locally with Docker
 
 Use Node.js 24 and pnpm 11 for local tools. Create a Convex deployment and a WorkOS application, then copy `.env.example` to `.env.local` and fill the Next.js values. The WorkOS callback must match `NEXT_PUBLIC_WORKOS_REDIRECT_URI`, and `NEXT_PUBLIC_SITE_URL` must be the public URL serving this application. Keep `.env.local` private.

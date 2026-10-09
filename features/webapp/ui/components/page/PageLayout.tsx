@@ -10,10 +10,10 @@ export interface PageLayoutProps {
 
 /**
  * Horizontal border contract for a panel rendered beside primary content.
- * Mobile panels stay edge-to-edge; desktop panels own the divider on the left.
+ * Mobile panels stay edge-to-edge; desktop panels own the divider at the inline end.
  */
 export const DESKTOP_PANEL_BORDER_CLASS_NAME =
-  "border-x-0 md:border-border md:border-l md:border-r-0";
+  "border-x-0 md:border-border md:border-e md:border-s-0";
 
 /**
  * PageLayout component that provides consistent container styling

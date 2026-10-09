@@ -100,7 +100,7 @@ const headerVariants = cva(
   {
     variants: {
       size: {
-        default: "pr-4 md:pr-2",
+        default: "ps-4 md:ps-2",
       },
     },
     defaultVariants: {
@@ -115,7 +115,7 @@ const brandLinkVariants = cva(
 );
 const navVariants = cva("flex items-center gap-0 md:gap-4");
 const versionBadgeFrameVariants = cva(
-  "border-border mr-2 inline-flex border-r border-l px-2 py-[0.969rem]"
+  "border-border me-2 inline-flex border-x px-2 py-[0.969rem]"
 );
 
 /* ----------------------------------------------------------------------------
