@@ -1,9 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useAction, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
-import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import { useSetupThreadDraft } from "@/shared/hooks";
 import { getWorkspaceUseCase } from "@/shared/lib/workspaceUseCases";
@@ -17,7 +16,6 @@ import {
   DESKTOP_PANEL_BORDER_CLASS_NAME,
 } from "@/features/webapp/ui/components";
 import { GrantedPlanStep } from "./onboarding/GrantedPlanStep";
-import { PlanStep } from "./onboarding/PlanStep";
 import { SetupExampleProfiles } from "./onboarding/SetupExampleProfiles";
 
 export function AgentOnboardingPanel({
@@ -33,7 +31,6 @@ export function AgentOnboardingPanel({
 }) {
   const { setupDraft: session, isLoading } = useSetupThreadDraft(threadId);
   const approve = useMutation(api.setupSessions.approveSetupGeneration);
-  const startCheckout = useAction(api.billing.startCheckoutFlow);
   const [isApproving, setIsApproving] = useState(false);
   const [approvalFailure, setApprovalFailure] = useState<{
     revisionKey: string;
@@ -44,7 +41,6 @@ export function AgentOnboardingPanel({
     approvalFailure?.revisionKey === revisionKey
       ? approvalFailure.message
       : null;
-  const [isStartingCheckout, setIsStartingCheckout] = useState(false);
   const labels = getWorkspaceUseCase(session?.useCaseKey);
   const step = session?.currentStepId ?? "input";
   const review = session?.status === "awaiting_icp_confirmation";
@@ -71,41 +67,9 @@ export function AgentOnboardingPanel({
       setIsApproving(false);
     }
   }, [approve, isApproving, session, approvalDisabled, revisionKey]);
-  const handleCheckout = useCallback(
-    async (
-      tier: "hobby" | "base" | "pro",
-      billingPeriod: "monthly" | "yearly"
-    ) => {
-      if (isStartingCheckout) return;
-      setIsStartingCheckout(true);
-      try {
-        const returnUrl = new URL(window.location.href);
-        for (const key of ["code", "state", "error", "error_description"])
-          returnUrl.searchParams.delete(key);
-        const { url } = await startCheckout({
-          tier,
-          billingPeriod,
-          source: "onboarding_plan",
-          origin: returnUrl.origin,
-          returnTo: `${returnUrl.pathname}${returnUrl.search}`,
-          threadId: threadId ?? undefined,
-        });
-        window.location.assign(url);
-      } catch (error) {
-        toast.error("Could not start checkout", {
-          description:
-            error instanceof Error ? error.message : "Please try again.",
-        });
-      } finally {
-        setIsStartingCheckout(false);
-      }
-    },
-    [isStartingCheckout, startCheckout, threadId]
-  );
-
   const title =
     step === "plan"
-      ? "Choose a plan"
+      ? "Tester access"
       : `Example ${labels.entityPlural.toLowerCase()}`;
   return (
     <aside
@@ -153,13 +117,9 @@ export function AgentOnboardingPanel({
                 {!session.requiresPlan ? (
                   <GrantedPlanStep threadId={threadId} />
                 ) : (
-                  <PlanStep
-                    entityPlural={labels.entityPlural}
-                    isStartingCheckout={isStartingCheckout}
-                    onUpgradePaid={({ tier, billing }) =>
-                      void handleCheckout(tier, billing)
-                    }
-                  />
+                  <p className="text-muted-foreground text-sm">
+                    Tester access has not been granted for this account. Contact the administrator.
+                  </p>
                 )}
               </div>
             ) : (

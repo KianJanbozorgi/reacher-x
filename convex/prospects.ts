@@ -736,7 +736,7 @@ export const getWorkspaceProspects = query({
       return getEmptyPaginatedResult();
     }
 
-    return await listWorkspaceProspectSummariesPage(ctx.db, args);
+    return await listWorkspaceProspectSummariesPage(ctx.db, { ...args, platform: "twitter" });
   },
 });
 
@@ -999,6 +999,7 @@ export const getOnboardingProgress = query({
 export const createProspect = mutation({
   args: createProspectArgsValidator,
   handler: async (ctx, args) => {
+    if (args.platform !== "twitter") throw new Error("Only Twitter prospects are supported.");
     const user = await requireViewerUser(ctx);
     await requireOwnedWorkspace(ctx, args.workspaceId, {
       user,
@@ -1091,6 +1092,9 @@ export const createProspectsBatch = internalMutation({
     createdTwitterUserIds: v.array(v.string()),
   }),
   handler: async (ctx, args) => {
+    if (args.prospects.some((prospect) => prospect.platform !== "twitter")) {
+      throw new Error("Only Twitter prospects are supported.");
+    }
     // Project logging policy requires console.log for canonical success-path events.
     // eslint-disable-next-line no-console
     console.log("[Prospects] Persist batch attempt", {

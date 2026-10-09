@@ -21,7 +21,7 @@ export const icpSchema = z.object({
   title: z.string().describe("ICP segment title"),
   description: z.string().describe("Who this segment is"),
   painPoints: z.array(z.string()).describe("Their pain points"),
-  channels: z.array(z.literal("Twitter")).length(1),
+  channels: z.array(z.literal("X/Twitter")).length(1),
   syntheticExamples: syntheticProfileExamplesSchema,
   // Synthetic posts: realistic tweets/posts this ICP would write (stored permanently)
   syntheticPosts: z

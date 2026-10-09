@@ -38,13 +38,8 @@ export function ConnectionsStep({
     api.connectedAccounts.getConnectionSnapshot,
     accountsEnabled ? { platform: "twitter" } : "skip"
   );
-  const linkedinQuery = useQueryWithStatus(
-    api.connectedAccounts.getConnectionSnapshot,
-    accountsEnabled ? { platform: "linkedin" } : "skip"
-  );
   const xStatus = xQuery.data?.platform === "twitter" ? xQuery.data : null;
-  const linkedinStatus =
-    linkedinQuery.data?.platform === "linkedin" ? linkedinQuery.data : null;
+  const linkedinStatus = null;
 
   const completeSetupConnections = useMutation(
     api.setupSessions.completeSetupConnections
@@ -54,8 +49,8 @@ export function ConnectionsStep({
     convexLoading ||
     workosLoading ||
     (isAuthenticated && currentUserQuery.isPending) ||
-    (accountsEnabled && (xQuery.isPending || linkedinQuery.isPending));
-  const statusError = [xQuery.error?.message, linkedinQuery.error?.message]
+    (accountsEnabled && xQuery.isPending);
+  const statusError = [xQuery.error?.message]
     .filter(Boolean)
     .join(" · ");
   const isMutating = isCompletingStep;

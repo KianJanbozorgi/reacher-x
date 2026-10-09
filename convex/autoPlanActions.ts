@@ -501,6 +501,7 @@ export const generateGroundedAutoPlanDraft = internalAction({
 
     let linkedinRelationship: LinkedInRelationshipStatus | null = null;
     let linkedinHasExistingConversation = false;
+    assertTwitterOnly(prospect.platform);
     if (prospect.platform === "linkedin") {
       try {
         const relationship = await ctx.runAction(
@@ -756,3 +757,5 @@ export const generateGroundedAutoPlanDraft = internalAction({
     };
   },
 });
+
+function assertTwitterOnly(platform: string): void { if (platform !== "twitter") throw new Error("LinkedIn planning is disabled."); }

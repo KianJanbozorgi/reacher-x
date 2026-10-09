@@ -412,6 +412,8 @@ export const createMonitorApiCall = internalAction({
     workspaceName: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<CreateMonitorApiResult> => {
+    assertSocialApiTechMonitorUnsupported();
+
     const apiKey = process.env.SOCIALAPI_API_KEY;
     if (!apiKey) {
       // Don't retry configuration errors
@@ -928,3 +930,5 @@ export const retireDiscoveryMonitorsCron = internalAction({
     };
   },
 });
+
+function assertSocialApiTechMonitorUnsupported(): void { throw new Error("SocialAPI.tech does not support webhook monitors."); }

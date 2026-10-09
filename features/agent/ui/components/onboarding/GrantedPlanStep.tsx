@@ -33,7 +33,7 @@ export function GrantedPlanStep({ threadId }: { threadId: string }) {
           ? "Your plan access is ready. Continue to finish setup."
           : plan === undefined
             ? "Checking your plan access."
-            : "Plan access is no longer available. Choose a plan to continue."}
+            : "Tester access is unavailable. Contact the administrator."}
       </p>
       <Button
         size="xs"

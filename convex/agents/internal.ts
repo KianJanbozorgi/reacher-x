@@ -900,7 +900,7 @@ export const convertToSocialQueriesAction = internalAction({
     });
 
     const includeTwitter = args.platforms.includes("twitter");
-    const includeLinkedIn = args.platforms.includes("linkedin");
+    const includeLinkedIn = false;
     const includeLinkedInPeople =
       includeLinkedIn && shouldUseLinkedInPeopleDiscovery(args.targetingSpec);
     const platformContext =

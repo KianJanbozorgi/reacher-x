@@ -179,6 +179,8 @@ export const createUserTweetsMonitorApiCall = internalAction({
     webhookUrl: v.string(),
   },
   handler: async (ctx, args): Promise<CreateMonitorApiResult> => {
+    assertSocialApiTechMonitorUnsupported();
+
     const apiKey = process.env.SOCIALAPI_API_KEY;
     if (!apiKey) {
       return { success: false, error: "SocialAPI not configured" };
@@ -511,3 +513,5 @@ export const getExpiredMonitors = internalQuery({
     );
   },
 });
+
+function assertSocialApiTechMonitorUnsupported(): void { throw new Error("SocialAPI.tech does not support webhook monitors."); }

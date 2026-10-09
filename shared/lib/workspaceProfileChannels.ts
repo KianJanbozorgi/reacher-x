@@ -1,4 +1,4 @@
-export const WORKSPACE_PROFILE_CHANNELS = ["X/Twitter", "LinkedIn"] as const;
+export const WORKSPACE_PROFILE_CHANNELS = ["X/Twitter"] as const;
 
 export type WorkspaceProfileChannel =
   (typeof WORKSPACE_PROFILE_CHANNELS)[number];
@@ -9,9 +9,6 @@ export function getWorkspaceProfileChannel(
   const normalized = value.trim().toLowerCase();
   if (normalized === "x" || normalized.includes("twitter")) {
     return "X/Twitter";
-  }
-  if (normalized.includes("linkedin")) {
-    return "LinkedIn";
   }
   return null;
 }

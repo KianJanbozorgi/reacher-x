@@ -372,6 +372,8 @@ async function repairTwitterSourceVersionIfNeeded(
 export const ensureStyleMonitor = internalAction({
   args: { userId: v.id("users") },
   handler: async (ctx, args) => {
+    assertSocialApiTechMonitorUnsupported();
+
     // 1. Get active X account
     let xAccount = await ctx.runQuery(
       internal.xStore.getXAccountForUserInternal,
@@ -592,3 +594,5 @@ export const deleteStyleMonitorForUser = internalAction({
     );
   },
 });
+
+function assertSocialApiTechMonitorUnsupported(): void { throw new Error("SocialAPI.tech has no webhook-monitor endpoint."); }

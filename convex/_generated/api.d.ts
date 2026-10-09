@@ -136,6 +136,7 @@ import type * as lib_enrichmentPool from "../lib/enrichmentPool.js";
 import type * as lib_errorHelpers from "../lib/errorHelpers.js";
 import type * as lib_exaApiBudget from "../lib/exaApiBudget.js";
 import type * as lib_functionBuilders from "../lib/functionBuilders.js";
+import type * as lib_hiknow from "../lib/hiknow.js";
 import type * as lib_jevClient from "../lib/jevClient.js";
 import type * as lib_jevEvalCore from "../lib/jevEvalCore.js";
 import type * as lib_jevPrefilterCore from "../lib/jevPrefilterCore.js";
@@ -241,6 +242,7 @@ import type * as lib_setupWorkflowEvents from "../lib/setupWorkflowEvents.js";
 import type * as lib_sharedMemorySemanticCache from "../lib/sharedMemorySemanticCache.js";
 import type * as lib_socialApiBudget from "../lib/socialApiBudget.js";
 import type * as lib_socialApiFetch from "../lib/socialApiFetch.js";
+import type * as lib_socialApiTech from "../lib/socialApiTech.js";
 import type * as lib_socialApiTwitterMap from "../lib/socialApiTwitterMap.js";
 import type * as lib_structuredOutputCore from "../lib/structuredOutputCore.js";
 import type * as lib_styleDistillation from "../lib/styleDistillation.js";
@@ -541,6 +543,7 @@ declare const fullApi: ApiFromModules<{
   "lib/errorHelpers": typeof lib_errorHelpers;
   "lib/exaApiBudget": typeof lib_exaApiBudget;
   "lib/functionBuilders": typeof lib_functionBuilders;
+  "lib/hiknow": typeof lib_hiknow;
   "lib/jevClient": typeof lib_jevClient;
   "lib/jevEvalCore": typeof lib_jevEvalCore;
   "lib/jevPrefilterCore": typeof lib_jevPrefilterCore;
@@ -646,6 +649,7 @@ declare const fullApi: ApiFromModules<{
   "lib/sharedMemorySemanticCache": typeof lib_sharedMemorySemanticCache;
   "lib/socialApiBudget": typeof lib_socialApiBudget;
   "lib/socialApiFetch": typeof lib_socialApiFetch;
+  "lib/socialApiTech": typeof lib_socialApiTech;
   "lib/socialApiTwitterMap": typeof lib_socialApiTwitterMap;
   "lib/structuredOutputCore": typeof lib_structuredOutputCore;
   "lib/styleDistillation": typeof lib_styleDistillation;
@@ -855,5 +859,4 @@ export declare const components: {
   memoryEvaluationPool: import("@convex-dev/workpool/_generated/component.js").ComponentApi<"memoryEvaluationPool">;
   tenantExecutionPool: import("@convex-dev/workpool/_generated/component.js").ComponentApi<"tenantExecutionPool">;
   rag: import("@convex-dev/rag/_generated/component.js").ComponentApi<"rag">;
-  polar: import("@convex-dev/polar/_generated/component.js").ComponentApi<"polar">;
 };

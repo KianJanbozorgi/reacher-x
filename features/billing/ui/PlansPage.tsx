@@ -8,7 +8,7 @@ export function PlansPage() {
     <div className="max-w-xl space-y-3 p-4">
       <h2 className="font-medium">Private tester access</h2>
       <p>Access is managed by the administrator.</p>
-      {plan ? <><p>Plan: {plan.tier}</p><p>Prospect limit: {plan.prospectsLimit}</p><p>Workspace limit: {plan.workspacesLimit}</p></> : <p>Loading access…</p>}
+      {plan ? <><p>Plan: {plan.tier}</p><p>Workspace limit: {plan.workspaces.limit}</p></> : <p>Loading access…</p>}
     </div>
   </PageContent></PageLayout>;
 }

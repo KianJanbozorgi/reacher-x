@@ -106,12 +106,19 @@ export async function fetchSocialApiTech(
   const request = async (endpoint: string, params: Record<string, string>) => {
     const url = new URL(`${SOCIAL_API_TECH_BASE_URL}${endpoint}`);
     for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-    return fetcher(url, {
-      method: "GET",
-      headers: { "X-API-Key": apiKey, Accept: "application/json" },
-      signal: init?.signal ?? AbortSignal.timeout(30_000),
-      redirect: "error",
-    });
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const response = await fetcher(url, {
+        method: "GET",
+        headers: { "X-API-Key": apiKey, Accept: "application/json" },
+        signal: init?.signal ?? AbortSignal.timeout(30_000),
+        redirect: "error",
+      });
+      if (![502, 503, 504].includes(response.status) || attempt === 2) {
+        return response;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+    }
+    throw new Error("SocialAPI.tech request retries exhausted.");
   };
   const getUsername = async (identifier: string) => {
     if (!/^\d+$/.test(identifier)) return identifier.replace(/^@/, "");
@@ -131,8 +138,12 @@ export async function fetchSocialApiTech(
   if (path === "/twitter/search") {
     const type = operation.searchParams.get("type") ?? "Latest";
     if (!["Latest", "Top", "Media"].includes(type)) throw new UnsupportedSocialApiOperation(`search product ${type}`);
+    const originalQuery = operation.searchParams.get("query") ?? "";
+    const query = originalQuery.replace(/\bsince_time:(\d+)/g, (_match, value: string) =>
+      `since:${new Date(Number(value) * 1000).toISOString().slice(0, 10)}`
+    ).replace(/\bsince_id:\d+/g, "").trim();
     response = await request("/search/advanced", {
-      query: operation.searchParams.get("query") ?? "",
+      query,
       product: type,
       limit: "20",
     });
@@ -163,7 +174,32 @@ export async function fetchSocialApiTech(
   }
   const payload: unknown = await response.json();
   const envelope = parseTechEnvelope(payload);
-  const normalized = kind === "posts" ? normalizeTechPosts(payload)
+  if (kind === "posts" && path === "/twitter/search" && Array.isArray(envelope.data)) {
+    const handles = [...new Set(envelope.data.map((item) => {
+      const author = record(record(item).author ?? record(item).user);
+      return !string(author.id ?? author.user_id ?? author.id_str)
+        ? string(author.username ?? author.screen_name) : undefined;
+    }).filter((handle): handle is string => Boolean(handle)))].slice(0, 20);
+    const hydrated = new Map<string, RecordValue>();
+    for (const handle of handles) {
+      const profileResponse = await request("/user/info", { username: handle });
+      if (!profileResponse.ok) continue;
+      try { hydrated.set(handle, normalizeTechUser(parseTechEnvelope(await profileResponse.json()).data)); }
+      catch { /* Skip malformed profiles below. */ }
+    }
+    envelope.data = envelope.data.map((item) => {
+      const tweet = record(item);
+      const author = record(tweet.author ?? tweet.user);
+      const handle = string(author.username ?? author.screen_name);
+      return handle && hydrated.has(handle)
+        ? { ...tweet, author: { ...hydrated.get(handle), ...author } }
+        : tweet;
+    }).filter((item) => {
+      const author = record(record(item).author ?? record(item).user);
+      return Boolean(string(author.id ?? author.user_id ?? author.id_str));
+    });
+  }
+  const normalized = kind === "posts" ? normalizeTechPosts(envelope)
     : kind === "profile" ? normalizeTechUser(envelope.data)
     : { is_following: record(envelope.data).following === true };
   return Response.json(normalized);

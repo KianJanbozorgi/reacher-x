@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 import { DirectAggregate } from "@convex-dev/aggregate";
-import polarTest from "@convex-dev/polar/test";
 import { convexTest } from "convex-test";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { api, components, internal } from "./_generated/api";
@@ -11,17 +10,20 @@ import { getCurrentUTCTimestamp } from "../shared/lib/utils/time/timeUtils";
 const modules = import.meta.glob("./**/*.ts");
 const now = Date.UTC(2026, 8, 12, 12);
 vi.stubEnv("OPENAI_API_KEY", "test-key");
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllEnvs();
+});
 
 async function fixture(
   used = 100,
   tier: "free" | "hobby" | "base" | "pro" = "hobby",
   ready = true
 ) {
+  vi.stubEnv("PRIVATE_ALLOWED_EMAILS", "owner@example.test");
   vi.useFakeTimers();
   vi.setSystemTime(now);
   const t = convexTest(schema, modules);
-  polarTest.register(t);
   const data = await t.run(async (ctx) => {
     const userId = await ctx.db.insert("users", {
       workosUserId: "usage-owner",
@@ -96,7 +98,11 @@ async function fixture(
       });
     return { userId, planId, workspaceId, otherWorkspaceId };
   });
-  return { t, owner: t.withIdentity({ subject: "usage-owner" }), ...data };
+  return {
+    t,
+    owner: t.withIdentity({ subject: "usage-owner", email: "owner@example.test" }),
+    ...data,
+  };
 }
 
 describe("workspace plan usage", () => {
@@ -136,87 +142,6 @@ describe("workspace plan usage", () => {
         nowMs: nextNowMs,
       })
     ).toMatchObject({ used: 0, limitReached: false, noticeDismissed: false });
-  });
-  test("server-issued query time respects the actual subscription expiry", async () => {
-    const { t, owner, workspaceId, userId } = await fixture();
-    const start = Date.UTC(2026, 8, 5);
-    const end = Date.UTC(2026, 9, 5);
-    await t.mutation(components.polar.lib.createProduct, {
-      product: {
-        id: "clock-product",
-        createdAt: new Date(start).toISOString(),
-        modifiedAt: null,
-        name: "Hobby",
-        description: null,
-        recurringInterval: "month",
-        isRecurring: true,
-        isArchived: false,
-        organizationId: "clock-test",
-        prices: [],
-        medias: [],
-      },
-    });
-    await t.mutation(components.polar.lib.insertCustomer, {
-      userId,
-      id: "clock-customer",
-    });
-    await t.mutation(components.polar.lib.updateSubscription, {
-      subscription: {
-        id: "clock-subscription",
-        customerId: "clock-customer",
-        createdAt: new Date(start).toISOString(),
-        modifiedAt: null,
-        amount: 1000,
-        currency: "usd",
-        recurringInterval: "month",
-        status: "active",
-        currentPeriodStart: new Date(start).toISOString(),
-        currentPeriodEnd: new Date(end).toISOString(),
-        cancelAtPeriodEnd: false,
-        startedAt: new Date(start).toISOString(),
-        endedAt: null,
-        productId: "clock-product",
-        checkoutId: null,
-        metadata: {},
-      },
-    });
-    vi.setSystemTime(end - 60_000);
-    const nowMs = await owner.action(api.workspacePlanUsage.getServerTime, {});
-    const usage = (await owner.query(api.workspacePlanUsage.getCurrent, {
-      workspaceId,
-      nowMs,
-    }))!;
-    expect(usage).toMatchObject({
-      cycleEnd: end,
-      used: 100,
-      limitReached: true,
-    });
-    await owner.mutation(api.workspacePlanUsage.dismissNotice, {
-      workspaceId,
-      noticeKey: usage.noticeKey,
-    });
-    expect(
-      await owner.query(api.workspacePlanUsage.getCurrent, {
-        workspaceId,
-        nowMs,
-      })
-    ).toMatchObject({ noticeDismissed: true });
-    vi.setSystemTime(end + 60_000);
-    const nextNowMs = await owner.action(
-      api.workspacePlanUsage.getServerTime,
-      {}
-    );
-    expect(
-      await owner.query(api.workspacePlanUsage.getCurrent, {
-        workspaceId,
-        nowMs: nextNowMs,
-      })
-    ).toMatchObject({
-      cycleEnd: Date.UTC(2026, 10, 1) - 1,
-      used: 0,
-      limitReached: false,
-      noticeDismissed: false,
-    });
   });
   test.each([0, 99, 100, 105])("matches /usage at %i used", async (used) => {
     const { owner, workspaceId } = await fixture(used);

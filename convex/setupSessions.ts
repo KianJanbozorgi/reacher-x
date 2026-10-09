@@ -463,7 +463,7 @@ async function applySetupPlanSelection(
     const verifiedPlan = await getUserPlanTier(ctx.db, session.userId);
     if (!isPaidPlanTier(verifiedPlan))
       throw new Error(
-        "Payment is not confirmed yet. Please wait and try again."
+        "Tester access is unavailable. Contact the administrator."
       );
     return await finalizeSetupSessionReady(ctx, session, {
       planChoice: verifiedPlan,
@@ -479,7 +479,7 @@ async function applySetupPlanSelection(
 
   const verifiedPlan = await getUserPlanTier(ctx.db, session.userId);
   if (!isPaidPlanTier(verifiedPlan))
-    throw new Error("Payment is not confirmed yet. Please wait and try again.");
+    throw new Error("Tester access is unavailable. Contact the administrator.");
   return await finalizeSetupSessionReady(ctx, session, {
     planChoice: verifiedPlan,
   });

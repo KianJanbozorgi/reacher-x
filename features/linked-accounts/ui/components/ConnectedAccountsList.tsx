@@ -17,11 +17,11 @@ export interface ConnectedAccountsListProps {
   googleConnectedAt?: Date;
   isGoogleConnected: boolean;
   xStatus: TwitterConnectionStatus | null;
-  linkedinStatus: LinkedInConnectionStatus | null;
   onConnectX: () => void;
   onDisconnectX: () => void;
-  onConnectLinkedIn: () => void;
-  onDisconnectLinkedIn: () => void;
+  linkedinStatus?: LinkedInConnectionStatus | null;
+  onConnectLinkedIn?: () => void;
+  onDisconnectLinkedIn?: () => void;
   onRetryLinkedIn?: () => void;
   /** When true, omit Disconnect (e.g. onboarding). */
   hideXDisconnect?: boolean;
@@ -34,14 +34,9 @@ export function ConnectedAccountsList({
   googleConnectedAt,
   isGoogleConnected,
   xStatus,
-  linkedinStatus,
   onConnectX,
   onDisconnectX,
-  onConnectLinkedIn,
-  onDisconnectLinkedIn,
-  onRetryLinkedIn,
   hideXDisconnect,
-  hideLinkedInDisconnect,
 }: ConnectedAccountsListProps) {
   if (loading) {
     return <LinkedAccountsListSkeleton rows={2} />;
@@ -59,26 +54,9 @@ export function ConnectedAccountsList({
       xStatus!.status === "reconnect_required" ||
       (xStatus!.missingScopes?.length ?? 0) > 0);
 
-  const linkedInHandle = linkedinStatus?.isConnected
-    ? linkedinStatus.publicIdentifier
-      ? `@${linkedinStatus.publicIdentifier}`
-      : linkedinStatus.displayName || "Connected"
-    : "@Connect";
-
-  const linkedInIsFullyConnected = Boolean(linkedinStatus?.isConnected);
-  const linkedInNeedsReconnect =
-    Boolean(linkedinStatus) &&
-    !linkedInIsFullyConnected &&
-    (linkedinStatus!.status === "reconnect_required" ||
-      linkedinStatus!.status === "action_required" ||
-      linkedinStatus!.status === "restricted");
   const xStyleIssueMessage =
     xIsFullyConnected && xStatus?.styleSyncIssue?.key
       ? getStyleSyncIssueInlineMessage("twitter")
-      : null;
-  const linkedInStyleIssueMessage =
-    linkedInIsFullyConnected && linkedinStatus?.styleSyncIssue?.key
-      ? getStyleSyncIssueInlineMessage("linkedin")
       : null;
 
   return (
