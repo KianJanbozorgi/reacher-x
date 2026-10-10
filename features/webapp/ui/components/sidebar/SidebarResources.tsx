@@ -32,23 +32,23 @@ import {
 export function SidebarResources() {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Resources.</SidebarGroupLabel>
+      <SidebarGroupLabel>منابع</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
             <Collapsible className="group/collapsible [&[data-state=open]>button>svg:last-child]:rotate-90">
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Get started">
+                <SidebarMenuButton tooltip="شروع">
                   <DeveloperGuideIcon className="fill-sidebar-foreground" />
-                  <span className="truncate">Get started</span>
+                  <span className="truncate">شروع</span>
                   <ChevronRightIcon className="fill-sidebar-foreground ms-auto rotate-180 transition-transform" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
                   <SidebarMenuItem>
-                    <SidebarMenuButton tooltip="Thread">
-                      <span className="truncate">🧵 Thread</span>
+                    <SidebarMenuButton tooltip="گفتگو">
+                      <span className="truncate">🧵 گفتگو</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenuSub>

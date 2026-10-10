@@ -36,7 +36,7 @@ export function NewWorkspaceDraftModal({
     >
       <AlertDialogContent className="max-w-md">
         <AlertDialogHeader className="space-y-3 text-left">
-          <AlertDialogTitle>Unfinished workspace draft</AlertDialogTitle>
+          <AlertDialogTitle>پیش‌نویس ناتمام فضای کاری</AlertDialogTitle>
           <AlertDialogDescription className="space-y-2">
             <span className="block">
               You already have an unfinished setup draft:

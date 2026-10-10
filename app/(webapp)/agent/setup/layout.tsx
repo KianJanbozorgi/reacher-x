@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { createPageMetadata } from "@/shared/lib/metadata";
 
-export const metadata: Metadata = createPageMetadata("Agent Setup");
+export const metadata: Metadata = createPageMetadata("راه‌اندازی دستیار");
 
 export default function AgentSetupLayout({
   children,

@@ -247,7 +247,7 @@ const AGENT_MESSAGE_AVATAR_SLOT_CLASSNAME =
   "self-start group-has-data-[slot=message-footer]/message:translate-y-0";
 /** Matches MockSetupThreadPreview empty-case composer copy. */
 const SETUP_AUDIENCE_COMPOSER_PLACEHOLDER =
-  "Paste a link or describe who you’re looking for…";
+  "لینکی وارد کنید یا بگویید دنبال چه کسانی هستید…";
 
 // ============================================================================
 // Types
@@ -297,8 +297,8 @@ function MentionPickerButton({
       size="xsIcon"
       type="button"
       disabled={disabled}
-      aria-label="Tag people, plans, tasks, posts, or attachments"
-      title="Tag people, plans, tasks, posts, or attachments"
+      aria-label="برچسب‌گذاری افراد، پلن‌ها، وظایف، پست‌ها یا فایل‌ها"
+      title="برچسب‌گذاری افراد، پلن‌ها، وظایف، پست‌ها یا فایل‌ها"
       onMouseDown={(event) => event.preventDefault()}
       onClick={onTriggerMention}
     >
@@ -427,7 +427,7 @@ const TOOL_ICON_COMPONENTS: Record<
   twitter: TwitterIcon,
 };
 
-const AGENT_DISPLAY_NAME = "Agent";
+const AGENT_DISPLAY_NAME = "دستیار";
 const AGENT_AVATAR_FALLBACK = "△";
 const AGENT_CHAT_CONTENT_COLUMN_CLASS_NAME = "mx-auto w-full max-w-[48rem]";
 const AGENT_HISTORY_PRELOAD_DISTANCE = 160;
@@ -620,12 +620,12 @@ function LivePlanPreviewCard({
       footerAction={
         onOpenPlanPanel
           ? {
-              label: "Show plan",
+              label: "نمایش پلن",
               onClick: () =>
                 onOpenPlanPanel(liveProspectId ?? prospectId ?? null),
               disabled: resolvedPlanPreview.showPlanDisabled,
               title: resolvedPlanPreview.showPlanDisabled
-                ? "This plan has been deleted"
+                ? "این پلن حذف شده است"
                 : undefined,
             }
           : undefined
@@ -859,9 +859,9 @@ function ToolCallVisualization({
               toast.promise(
                 deletePlan({ planId: planId as Id<"outreachPlans"> }),
                 {
-                  loading: "Deleting plan...",
-                  success: "Plan deleted",
-                  error: "Failed to delete plan",
+                  loading: "در حال حذف پلن…",
+                  success: "پلن حذف شد",
+                  error: "حذف پلن ناموفق بود",
                 }
               );
             }}
@@ -976,9 +976,9 @@ function ToolCallVisualization({
                   planId: resolvedPlanId as Id<"outreachPlans">,
                 }),
                 {
-                  loading: "Deleting plan...",
-                  success: "Plan deleted",
-                  error: "Failed to delete plan",
+                  loading: "در حال حذف پلن…",
+                  success: "پلن حذف شد",
+                  error: "حذف پلن ناموفق بود",
                 }
               );
             }}
@@ -1044,9 +1044,9 @@ function ToolCallVisualization({
 function getPendingTurnLabel(pendingTurn: PendingTurnState): string {
   switch (pendingTurn.phase) {
     case "stopping":
-      return "Stopping";
+      return "در حال توقف";
     default:
-      return pendingTurn.assistantLabel || "Deep reasoning in progress";
+      return pendingTurn.assistantLabel || "در حال بررسی دقیق";
   }
 }
 
@@ -1058,7 +1058,7 @@ function PendingAssistantMessage({
   return (
     <Message align="start" className="items-start">
       <MessageAvatar
-        alt="Agent"
+        alt="دستیار"
         fallback={AGENT_AVATAR_FALLBACK}
         className="bg-background text-foreground"
         avatarClassName="size-6 rounded-md"
@@ -1075,7 +1075,7 @@ function SetupInlineAgentMessage({ children }: { children: React.ReactNode }) {
   return (
     <Message align="start" className="items-start">
       <MessageAvatar
-        alt="Agent"
+        alt="دستیار"
         fallback={AGENT_AVATAR_FALLBACK}
         className="bg-background text-foreground"
         avatarClassName="size-6 rounded-md"
@@ -1099,7 +1099,7 @@ function LocalUserMessage({
     <Message align="end" className="items-start">
       <MessageAvatar
         src={userImage}
-        alt="You"
+        alt="شما"
         fallback={getUserInitials(userName)}
         className="bg-primary text-primary-foreground"
         avatarClassName="size-6"
@@ -1250,7 +1250,7 @@ function CopyButton({ text }: { text: string }) {
   }, [text]);
 
   return (
-    <MessageAction tooltip={copied ? "Copied!" : "Copy"}>
+    <MessageAction tooltip={copied ? "کپی شد!" : "کپی"}>
       <Button
         variant="ghost"
         size="xsIcon"
@@ -1322,7 +1322,7 @@ function buildDisplayAttachmentFromEntity(
     mimeType: attachment.mimeType,
     mediaUrl: attachment.mediaUrl,
     status: "ready",
-    sourceLabel: "Tagged attachment",
+    sourceLabel: "فایل پیوست برچسب‌گذاری‌شده",
     onRemove,
   };
 }
@@ -1407,8 +1407,8 @@ function AgentAttachmentList({
           </AttachmentTitle>
           <AttachmentDescription className="text-muted-foreground">
             {attachment.status === "uploading"
-              ? "Uploading"
-              : (attachment.sourceLabel ?? "Attachment")}
+              ? "در حال بارگذاری"
+              : (attachment.sourceLabel ?? "پیوست")}
           </AttachmentDescription>
         </AttachmentContent>
         {attachment.onRemove ? (
@@ -1769,7 +1769,7 @@ function ChatMessage({
     message.status === "failed" &&
     !displayText &&
     !toolCalls.length
-      ? "That response couldn't be completed."
+      ? "تکمیل این پاسخ ممکن نشد."
       : "";
 
   if (
@@ -1782,14 +1782,14 @@ function ChatMessage({
     return (
       <Message align="start" className="items-start">
         <MessageAvatar
-          alt="Agent"
+          alt="دستیار"
           fallback={AGENT_AVATAR_FALLBACK}
           className="bg-background text-foreground"
           avatarClassName="size-6 rounded-md"
           slotClassName={AGENT_MESSAGE_AVATAR_SLOT_CLASSNAME}
         />
         <div className="flex max-w-[85%] flex-col gap-2 pt-1">
-          <ThinkingBar text="Thinking" />
+          <ThinkingBar text="در حال فکر کردن" />
           {supplementalContent}
         </div>
       </Message>
@@ -1818,7 +1818,7 @@ function ChatMessage({
       <Message align="end" className="items-start">
         <MessageAvatar
           src={userImage}
-          alt="You"
+          alt="شما"
           fallback={getUserInitials(userName)}
           className="bg-primary text-primary-foreground"
           avatarClassName="size-6"
@@ -1862,7 +1862,7 @@ function ChatMessage({
   return (
     <Message align="start" className="items-start">
       <MessageAvatar
-        alt="Agent"
+        alt="دستیار"
         fallback={AGENT_AVATAR_FALLBACK}
         className="bg-background text-foreground"
         avatarClassName="size-6 rounded-md"
@@ -2026,7 +2026,7 @@ function AgentHistoryLoadingIndicator({ isLoading }: { isLoading: boolean }) {
       className="pointer-events-none absolute inset-x-0 top-2 z-20 flex justify-center"
       role="status"
       aria-live="polite"
-      aria-label="Loading earlier messages"
+      aria-label="در حال بارگذاری پیام‌های پیشین"
     >
       <Spinner variant="circle" className="size-5" />
     </div>
@@ -2084,7 +2084,7 @@ function ChatHeader({
             size="xsIcon"
             onClick={onBack}
             disabled={setupIncomplete}
-            aria-label="Go back"
+            aria-label="بازگشت"
           >
             <ArrowBackIcon className="fill-current" />
           </Button>
@@ -2103,14 +2103,14 @@ function ChatHeader({
                 disabled={historyDisabled}
                 title={
                   !threadActionsReady
-                    ? "Loading workspace"
+                    ? "در حال بارگذاری فضای کاری"
                     : setupIncomplete
-                      ? "Complete workspace setup first"
-                      : "History"
+                      ? "ابتدا راه‌اندازی فضای کاری را کامل کنید"
+                      : "تاریخچه"
                 }
               >
                 <SearchActivityIcon className="fill-current" />
-                History
+                تاریخچه
               </Button>
               {onNewThread && (
                 <Button
@@ -2121,16 +2121,16 @@ function ChatHeader({
                   disabled={newThreadDisabled}
                   title={
                     !threadActionsReady
-                      ? "Loading workspace"
+                      ? "در حال بارگذاری فضای کاری"
                       : setupIncomplete
-                        ? "Complete workspace setup first"
+                        ? "ابتدا راه‌اندازی فضای کاری را کامل کنید"
                         : prospectArchived
-                          ? "Unarchive this profile to start a new thread"
-                          : "New thread"
+                          ? "برای شروع گفتگوی تازه، این پروفایل را از بایگانی خارج کنید"
+                          : "گفتگوی جدید"
                   }
                 >
                   <AddIcon className="fill-current" />
-                  New
+                  جدید
                 </Button>
               )}
               {onViewProfile || (onOpenDmPanel && dmEligibility) ? (
@@ -2138,7 +2138,7 @@ function ChatHeader({
                   <Button
                     variant="outline"
                     size="xsIcon"
-                    aria-label="Agent menu"
+                    aria-label="منوی دستیار"
                     disabled
                   >
                     <MoreHorizIcon className="fill-muted-foreground" />
@@ -2146,7 +2146,7 @@ function ChatHeader({
                 ) : (
                   <DropdownMenu>
                     <DropdownMenuTrigger
-                      aria-label="Agent menu"
+                      aria-label="منوی دستیار"
                       className={cn(
                         buttonVariants({ variant: "outline", size: "xsIcon" })
                       )}
@@ -2155,7 +2155,7 @@ function ChatHeader({
                       <MoreHorizIcon className="fill-muted-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>↳ Menu</DropdownMenuLabel>
+                      <DropdownMenuLabel>↳ منو</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       {onViewProfile && (
                         <DropdownMenuItem onClick={() => onViewProfile()}>
@@ -2184,7 +2184,7 @@ function ChatHeader({
                           )}
                           {resolvedDmPlatform === "linkedin"
                             ? "Message on LinkedIn"
-                            : "DM on X/Twitter"}
+                            : "پیام مستقیم در X/Twitter"}
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuContent>
@@ -2333,7 +2333,7 @@ function ChatSkeleton({
                 "text-muted-foreground min-h-10"
               )}
             >
-              Type here...
+              اینجا بنویسید…
             </div>
             <div className="flex items-center justify-between pt-0.5">
               <div className="flex items-center gap-1">
@@ -2547,12 +2547,12 @@ export function AgentChat({
   });
   const emptyPromptPlaceholder = useMemo(() => {
     if (!prospectId) {
-      return `Type and hit ↵ to chat with ${AGENT_DISPLAY_NAME}.`;
+      return `برای گفتگو با ${AGENT_DISPLAY_NAME} بنویسید و ↵ را بزنید.`;
     }
 
     return prospectDisplayData
-      ? `Chat about ${prospectDisplayData.conversationPlaceholderLabel} with ${AGENT_DISPLAY_NAME}.`
-      : `Chat about this person/org with ${AGENT_DISPLAY_NAME}.`;
+      ? `دربارهٔ ${prospectDisplayData.conversationPlaceholderLabel} با ${AGENT_DISPLAY_NAME} گفتگو کنید.`
+      : `دربارهٔ این شخص یا سازمان با ${AGENT_DISPLAY_NAME} گفتگو کنید.`;
   }, [prospectDisplayData, prospectId]);
 
   // Get workspace to check for prospects
@@ -2762,7 +2762,7 @@ export function AgentChat({
       setupUrlReadError !== setupUrlReadErrorToastRef.current
     ) {
       setupUrlReadErrorToastRef.current = setupUrlReadError;
-      toast.error("Couldn't read the URL", {
+      toast.error("خواندن نشانی ممکن نشد", {
         description: setupUrlReadError,
       });
     }
@@ -2775,8 +2775,8 @@ export function AgentChat({
     async (files: FileList | null) => {
       if (!files || files.length === 0) return;
       if (!effectiveWorkspaceId) {
-        toast.error("Attachment unavailable", {
-          description: "Select a workspace before uploading an attachment.",
+        toast.error("پیوست در دسترس نیست", {
+          description: "پیش از بارگذاری فایل، یک فضای کاری انتخاب کنید.",
         });
         return;
       }
@@ -2800,7 +2800,7 @@ export function AgentChat({
           CHAT_VIDEO_MIME_TYPES.has(normalizedMimeType) ||
           isDocument;
         if (!isSupportedAttachment) {
-          toast.error("Unsupported attachment", {
+          toast.error("نوع فایل پشتیبانی نمی‌شود", {
             description: `${file.name} is not supported. Use an image, GIF, video, or supported LinkedIn document.`,
           });
           continue;
@@ -2813,7 +2813,7 @@ export function AgentChat({
               ? MAX_CHAT_IMAGE_BYTES
               : MAX_CHAT_ATTACHMENT_BYTES;
         if (file.size > maxBytes) {
-          toast.error("File too large", {
+          toast.error("حجم فایل بیش از حد مجاز است", {
             description: `${file.name} exceeds ${Math.round(maxBytes / (1024 * 1024))} MB.`,
           });
           continue;
@@ -2874,11 +2874,11 @@ export function AgentChat({
             )
           );
         } catch (uploadError) {
-          agentChatUiLogger.error("Attachment upload failed", uploadError);
+          agentChatUiLogger.error("بارگذاری فایل ناموفق بود", uploadError);
           setChatAttachments((prev) =>
             prev.filter((attachment) => attachment.id !== attachmentId)
           );
-          toast.error("Attachment upload failed", {
+          toast.error("بارگذاری فایل ناموفق بود", {
             description: file.name,
           });
         }
@@ -2952,8 +2952,8 @@ export function AgentChat({
       return;
     }
     if (hasUploadingAttachment) {
-      toast.info("Hold on", {
-        description: "Attachments are still uploading.",
+      toast.info("کمی صبر کنید", {
+        description: "فایل‌ها هنوز در حال بارگذاری هستند.",
       });
       return;
     }
@@ -3167,11 +3167,11 @@ export function AgentChat({
         mode: setupSessionForInlineCard.mode,
       });
       router.push(buildSetupHref(next.threadId));
-      toast.success("Starting a fresh setup from step one.");
+      toast.success("راه‌اندازی تازه از مرحلهٔ اول شروع شد.");
     } catch (error) {
-      toast.error("Could not reset setup", {
+      toast.error("بازنشانی راه‌اندازی ممکن نشد", {
         description:
-          error instanceof Error ? error.message : "Please try again.",
+          error instanceof Error ? error.message : "لطفاً دوباره تلاش کنید.",
       });
     }
   }, [
@@ -3194,16 +3194,16 @@ export function AgentChat({
           mode: setupSessionForInlineCard.mode,
         });
         router.push(buildSetupHref(next.threadId));
-        toast.success("Draft removed. Starting setup again.");
+        toast.success("پیش‌نویس حذف شد. راه‌اندازی دوباره شروع می‌شود.");
         return;
       }
       setPreferredShellContext("workspace");
       router.push("/");
-      toast.success("Draft removed. Switched back to your workspace.");
+      toast.success("پیش‌نویس حذف شد. به فضای کاری بازگشتید.");
     } catch (error) {
-      toast.error("Could not delete draft", {
+      toast.error("حذف پیش‌نویس ممکن نشد", {
         description:
-          error instanceof Error ? error.message : "Please try again.",
+          error instanceof Error ? error.message : "لطفاً دوباره تلاش کنید.",
       });
     }
   }, [
@@ -3258,7 +3258,7 @@ export function AgentChat({
       toast.error(
         error instanceof Error
           ? error.message
-          : "Could not retry. Please try again."
+          : "تلاش دوباره ممکن نشد. لطفاً دوباره تلاش کنید."
       );
     }
   }, [retrySetup, setupSessionForInlineCard]);
@@ -3341,7 +3341,7 @@ export function AgentChat({
       return (
         <SetupOnboardingInlineCard
           useCaseKey={snapshot.useCaseKey}
-          title="Review examples"
+          title="بررسی نمونه‌ها"
           stepNumber={1}
           stepTotal={1}
           inputPhase="awaiting_icp_approval"
@@ -3419,7 +3419,7 @@ export function AgentChat({
 
   // Get user display info from local auth
   const userDisplayImage = authUser?.profilePictureUrl;
-  const userDisplayName = authUser?.firstName || authUser?.email || "User";
+  const userDisplayName = authUser?.firstName || authUser?.email || "کاربر";
   const composerDisplayAttachments = useMemo(
     () => [
       ...chatAttachments.map((attachment) => ({
@@ -3458,7 +3458,7 @@ export function AgentChat({
         <div
           className="flex min-h-0 flex-1 items-center justify-center"
           role="status"
-          aria-label="Loading setup conversation"
+          aria-label="در حال بارگذاری گفتگوی راه‌اندازی"
         >
           <Spinner variant="circle" className="size-5" />
         </div>
@@ -3557,11 +3557,11 @@ export function AgentChat({
               : isSetupRoute &&
                   setupSessionForInlineCard?.inputPhase ===
                     "awaiting_icp_approval"
-                ? `Tell me what to change about these ${getWorkspaceUseCase(setupSessionForInlineCard.useCaseKey).entityPlural.toLowerCase()}…`
+                ? `بگویید چه چیزی را دربارهٔ این ${getWorkspaceUseCase(setupSessionForInlineCard.useCaseKey).entityPlural.toLowerCase()} تغییر دهم…`
                 : isSetupRoute && setupSessionLocksComposer
-                  ? "Chat is locked during this setup step."
+                  ? "گفتگو در این مرحلهٔ راه‌اندازی غیرفعال است."
                   : displayMessages.length > 0
-                    ? "Type here..."
+                    ? "اینجا بنویسید…"
                     : emptyPromptPlaceholder
           }
           maxLength={10000}
@@ -3626,11 +3626,11 @@ export function AgentChat({
                   type="button"
                   onClick={() => attachFileInputRef.current?.click()}
                   disabled={isComposerLocked || isSetupCollectingAudience}
-                  aria-label="Attach media"
+                  aria-label="پیوست فایل"
                   title={
                     isSetupCollectingAudience
-                      ? "Available after setup"
-                      : "Attach media for the △ Agent to use"
+                      ? "پس از راه‌اندازی در دسترس است"
+                      : "پیوست فایل برای استفادهٔ دستیار"
                   }
                 >
                   <AttachFileIcon className="fill-current" />
@@ -3645,27 +3645,27 @@ export function AgentChat({
             }
             idleRight={
               showComposerStop ? (
-                <MessageAction tooltip="Stop generating">
+                <MessageAction tooltip="توقف پاسخ">
                   <Button
                     type="button"
                     variant="ghost"
                     size="xsIcon"
                     onClick={stop}
-                    aria-label="Stop generating"
-                    title="Stop generating"
+                    aria-label="توقف پاسخ"
+                    title="توقف پاسخ"
                   >
                     <StopIcon className="fill-current" />
                   </Button>
                 </MessageAction>
               ) : (
-                <MessageAction tooltip="Send message">
+                <MessageAction tooltip="ارسال پیام">
                   <Button
                     type="button"
                     variant="default"
                     size="xsIcon"
                     onClick={handleSendWithAttachments}
-                    aria-label="Send message"
-                    title="Send message"
+                    aria-label="ارسال پیام"
+                    title="ارسال پیام"
                     disabled={
                       (!input.trim() &&
                         readyAttachments.length === 0 &&
@@ -3872,7 +3872,7 @@ export function AgentChat({
                             workspaceStatusQuery.isPending
                           }
                           headline={
-                            isSetupRoute ? "Who should Agent find?" : undefined
+                            isSetupRoute ? "دستیار چه کسانی را پیدا کند؟" : undefined
                           }
                         >
                           {composerContent}
@@ -3887,7 +3887,7 @@ export function AgentChat({
                       className="mb-6"
                     >
                       <SystemMessage variant="error">
-                        {error.message || "Please try again."}
+                        {error.message || "لطفاً دوباره تلاش کنید."}
                       </SystemMessage>
                     </MessageScrollerItem>
                   )}
@@ -3898,7 +3898,7 @@ export function AgentChat({
                     >
                       <SystemMessage variant="warning">
                         {workspaceStatusQuery.error.message ||
-                          "Workspace status is unavailable. Agent actions may be limited until this resolves."}
+                          "وضعیت فضای کاری در دسترس نیست. تا رفع مشکل، بعضی کارهای دستیار محدود می‌شوند."}
                       </SystemMessage>
                     </MessageScrollerItem>
                   )}

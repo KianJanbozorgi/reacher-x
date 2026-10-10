@@ -329,7 +329,7 @@ export function WorkspaceSystemStatusDialog({
           className="max-w-md gap-0 overflow-hidden p-0"
         >
           <DialogHeader className="border-border border-b px-4 py-3 text-left">
-            <DialogTitle>Pause △ Agent?</DialogTitle>
+            <DialogTitle>دستیار متوقف شود؟</DialogTitle>
             <DialogDescription className="sr-only">
               Pause workspace agent confirmation
             </DialogDescription>
@@ -376,7 +376,7 @@ export function WorkspaceSystemStatusDialog({
       ) : (
         <DialogContent className="max-w-md gap-0 overflow-hidden p-0">
           <DialogHeader className="border-border border-b px-4 py-3 text-left">
-            <DialogTitle>All-time workspace progress</DialogTitle>
+            <DialogTitle>پیشرفت کل فضای کاری</DialogTitle>
             <DialogDescription className="sr-only">
               All-time workspace progress
             </DialogDescription>
@@ -406,7 +406,7 @@ export function WorkspaceSystemStatusDialog({
               aria-atomic="true"
               className="border-border bg-muted/20 border-t px-4 py-3"
             >
-              <p className="text-sm font-medium">Agent activity</p>
+              <p className="text-sm font-medium">فعالیت دستیار</p>
               <p className="text-muted-foreground mt-1 text-xs">
                 {schedulerStatus.state === "paused"
                   ? `Agent paused · ${schedulerStatus.queuedCount} waiting`

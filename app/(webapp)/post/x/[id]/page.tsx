@@ -112,7 +112,7 @@ function PostDetailInner() {
   return (
     <div className="flex max-w-full justify-start">
       <PageLayout className="shrink-0">
-        <PageHeader title="Post" onBack={() => router.back()} />
+        <PageHeader title="پست" onBack={() => router.back()} />
         <PageContent className="mx-4 mt-2 space-y-0 pb-4">
           {tweetLoading ? (
             <div className="space-y-3">

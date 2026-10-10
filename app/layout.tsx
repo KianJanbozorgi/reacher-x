@@ -85,7 +85,7 @@ export default function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang="fa"
       dir="rtl"
       suppressHydrationWarning
       data-backend-status-banner={backendStatusBanner ? "" : undefined}
@@ -115,20 +115,20 @@ export default function RootLayout({
         className={`${vazirmatn.variable} ${geistMono.variable} ${geistPixelSquare.variable} antialiased`}
       >
         <noscript>
-          <nav aria-label="Read without JavaScript" className="p-6">
-            <p>Read ReacherX without JavaScript:</p>
+          <nav aria-label="مطالعه بدون جاوااسکریپت" className="p-6">
+            <p>مطالعهٔ ReacherX بدون جاوااسکریپت:</p>
             <ul className="list-inside list-disc">
               <li>
-                <a href="/markdown/home">Home</a>
+                <a href="/markdown/home">خانه</a>
               </li>
               <li>
-                <a href="/markdown/pricing">Pricing</a>
+                <a href="/markdown/pricing">پلن‌ها</a>
               </li>
               <li>
-                <a href="/markdown/blog">Blog and guides</a>
+                <a href="/markdown/blog">وبلاگ و راهنماها</a>
               </li>
               <li>
-                <a href="/llms.txt">All public pages</a>
+                <a href="/llms.txt">همهٔ صفحه‌های عمومی</a>
               </li>
             </ul>
           </nav>

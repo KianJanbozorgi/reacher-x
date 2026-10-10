@@ -109,7 +109,7 @@ function WorkspaceProfileReviewPanelSkeleton({
   return (
     <aside className={cn(PANEL_SHELL_CLASS_NAME, className)}>
       <PageLayout className="flex h-full flex-col md:w-full">
-        <PageHeader title="Profiles" onBack={onClose} />
+        <PageHeader title="پروفایل‌ها" onBack={onClose} />
         <div className="space-y-3 px-4 py-4">
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-24 w-full" />
@@ -206,7 +206,7 @@ export function WorkspaceProfileReviewPanel({
     return (
       <aside className={cn(PANEL_SHELL_CLASS_NAME, className)}>
         <PageLayout className="flex h-full flex-col md:w-full">
-          <PageHeader title="Profiles" onBack={onClose} />
+          <PageHeader title="پروفایل‌ها" onBack={onClose} />
           <PageContent className="px-4 py-4">
             <Alert variant="destructive">
               <AlertTitle>Proposal unavailable</AlertTitle>
@@ -313,7 +313,7 @@ export function WorkspaceProfileReviewPanel({
     >
       <PageLayout className="flex h-full flex-col md:w-full">
         <PageHeader
-          title="Profiles"
+          title="پروفایل‌ها"
           titleSuffix={
             <span className="text-muted-foreground ml-1 text-xs font-normal">
               · Agent proposal

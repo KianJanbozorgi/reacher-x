@@ -48,8 +48,8 @@ test("a demo scope overrides an authenticated workspace only inside its subtree"
       createElement(Labels)
     )
   );
-  expect(html).toContain("Candidate|Interviewing|Hired");
-  expect(html).toContain("Person|In progress|Customer");
+  expect(html).toContain("نامزد|در حال مصاحبه|استخدام‌شده");
+  expect(html).toContain("شخص|در حال پیگیری|مشتری");
 });
 test("the normal provider still prefers the live workspace over initial labels", () => {
   const html = renderToStaticMarkup(
@@ -58,7 +58,7 @@ test("the normal provider still prefers the live workspace over initial labels",
       children: createElement(Labels),
     })
   );
-  expect(html).toContain("Person|In progress|Customer");
+  expect(html).toContain("شخص|در حال پیگیری|مشتری");
 });
 test("the normal provider still supplies initial labels before the workspace loads", () => {
   state.workspace = null;
@@ -68,5 +68,5 @@ test("the normal provider still supplies initial labels before the workspace loa
       children: createElement(Labels),
     })
   );
-  expect(html).toContain("Candidate|Interviewing|Hired");
+  expect(html).toContain("نامزد|در حال مصاحبه|استخدام‌شده");
 });

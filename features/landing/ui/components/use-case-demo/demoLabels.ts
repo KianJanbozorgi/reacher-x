@@ -17,7 +17,7 @@ export interface DemoUseCaseLabels {
   pageLabels: {
     entities: string;
     converts: string;
-    archives: "Archives";
+    archives: string;
     analytics: string;
   };
   discoveryVerb: "finding" | "sourcing";

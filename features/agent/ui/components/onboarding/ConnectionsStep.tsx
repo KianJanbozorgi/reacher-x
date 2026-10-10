@@ -89,11 +89,11 @@ export function ConnectionsStep({
         completionSessionIdRef.current = null;
         toast.error(
           args.connectedX
-            ? "Could not save connection step"
-            : "Could not continue setup",
+            ? "ذخیرهٔ مرحلهٔ اتصال ممکن نشد"
+            : "ادامهٔ راه‌اندازی ممکن نشد",
           {
             description:
-              error instanceof Error ? error.message : "Please try again.",
+              error instanceof Error ? error.message : "لطفاً دوباره تلاش کنید.",
           }
         );
       } finally {
@@ -113,21 +113,21 @@ export function ConnectionsStep({
 
   const handleConnectLater = useCallback(async () => {
     if (!sessionId) {
-      toast.error("Setup draft is still loading", {
-        description: "Please wait a moment and try again.",
+      toast.error("پیش‌نویس راه‌اندازی هنوز در حال بارگذاری است", {
+        description: "کمی صبر کنید و دوباره تلاش کنید.",
       });
       return;
     }
     await persistConnectionsStep({
       connectedX: false,
-      successMessage: "Connections step saved",
+      successMessage: "مرحلهٔ اتصال ذخیره شد",
     });
   }, [persistConnectionsStep, sessionId]);
 
   const handleContinue = useCallback(async () => {
     if (!sessionId) {
-      toast.error("Setup draft is still loading", {
-        description: "Please wait a moment and try again.",
+      toast.error("پیش‌نویس راه‌اندازی هنوز در حال بارگذاری است", {
+        description: "کمی صبر کنید و دوباره تلاش کنید.",
       });
       return;
     }
@@ -136,7 +136,7 @@ export function ConnectionsStep({
     }
     await persistConnectionsStep({
       connectedX: true,
-      successMessage: "Accounts connected",
+      successMessage: "حساب‌ها متصل شدند",
     });
   }, [canContinue, persistConnectionsStep, sessionId]);
 

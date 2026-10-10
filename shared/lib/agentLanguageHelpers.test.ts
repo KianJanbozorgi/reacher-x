@@ -45,22 +45,22 @@ describe("shared human-facing vocabulary", () => {
   );
   it("uses people for old workspaces without a goal and preserves their URLs", () => {
     expect(getWorkspaceUseCase(undefined)).toMatchObject({
-      entitySingular: "Person",
-      entityPlural: "People",
+      entitySingular: "شخص",
+      entityPlural: "افراد",
       routeSlugs: { entity: "prospects", success: "converts" },
-      stageLabels: { converted: "Customer" },
+      stageLabels: { converted: "مشتری" },
     });
     expect(getWorkspaceStageActionLabel(undefined, "converted")).toBe(
-      'Mark "Customer"'
+      "علامت‌گذاری به‌عنوان «مشتری»"
     );
     expect(getWorkspaceUseCase("recruiting").stageLabels.converted).toBe(
-      "Hired"
+      "استخدام‌شده"
     );
     expect(
       getWorkspaceUseCase("podcast_speaker_sourcing").stageLabels.converted
-    ).toBe("Booked");
+    ).toBe("ثبت‌شده");
     expect(getWorkspaceUseCase("general_outreach").stageLabels.converted).toBe(
-      "Converted"
+      "موفق"
     );
   });
   it("translates existing pricing strings without rewriting stored plans", () => {
@@ -69,16 +69,16 @@ describe("shared human-facing vocabulary", () => {
         "100 qualified prospects per workspace / month",
         "customer_prospecting"
       )
-    ).toBe("100 people who match per workspace / month");
+    ).toBe("100 فرد مناسب برای هر فضای کاری در ماه");
     expect(
       resolvePricingFeatureCopy(
         "100 qualified prospects per workspace / month",
         "recruiting"
       )
-    ).toBe("100 candidates who match per workspace / month");
+    ).toBe("100 نامزد مناسب برای هر فضای کاری در ماه");
     expect(
-      resolvePricingFeatureCopy("Unlimited workspaces", "recruiting")
-    ).toBe("Unlimited workspaces");
+      resolvePricingFeatureCopy("فضاهای کاری نامحدود", "recruiting")
+    ).toBe("فضاهای کاری نامحدود");
   });
   it("applies plain language to website analysis too", () => {
     expect(URL_ANALYSIS_PROMPT).toContain(USER_FACING_LANGUAGE_RULES);
@@ -90,11 +90,11 @@ it("uses current pricing copy when no goal or an older backend label is supplied
     resolvePlanFeatureEntityCopy(
       "100 qualified prospects per workspace / month"
     )
-  ).toBe("100 people who match per workspace / month");
+  ).toBe("100 فرد مناسب برای هر فضای کاری در ماه");
   expect(
     resolvePlanFeatureEntityCopy(
       "100 qualified prospects per workspace / month",
       "Prospects"
     )
-  ).toBe("100 people who match per workspace / month");
+  ).toBe("100 فرد مناسب برای هر فضای کاری در ماه");
 });

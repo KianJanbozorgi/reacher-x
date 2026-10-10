@@ -38,7 +38,7 @@ export default function AgentOpsPage() {
   return (
     <PageLayout className="flex max-w-none flex-col overflow-hidden border-none">
       <PageHeader
-        title="Agent observability"
+        title="وضعیت دستیار"
         actions={
           <Select
             value={tab}

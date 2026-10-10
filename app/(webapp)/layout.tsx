@@ -12,6 +12,7 @@ import { ProfileProvider } from "@/features/profile/contexts/TwitterProfileConte
 import { ProspectProfileProvider } from "@/features/prospects/contexts";
 import { WorkspaceTransitionProvider } from "@/features/webapp/contexts/WorkspaceTransitionContext";
 import { APP_DESCRIPTION } from "@/shared/lib/metadata";
+import { ConvexSessionGate } from "@/features/webapp/ui/components/ConvexSessionGate";
 
 export const metadata: Metadata = {
   title: "ReacherX",
@@ -21,9 +22,11 @@ export const metadata: Metadata = {
 export default function WebAppLayout({ children }: { children: ReactNode }) {
   return (
     <Suspense fallback={null}>
-      <ActiveUseCaseLabelsBoundary>
-        <WebAppLayoutContent>{children}</WebAppLayoutContent>
-      </ActiveUseCaseLabelsBoundary>
+      <ConvexSessionGate>
+        <ActiveUseCaseLabelsBoundary>
+          <WebAppLayoutContent>{children}</WebAppLayoutContent>
+        </ActiveUseCaseLabelsBoundary>
+      </ConvexSessionGate>
     </Suspense>
   );
 }

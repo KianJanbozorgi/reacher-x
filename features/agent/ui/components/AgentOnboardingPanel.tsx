@@ -61,7 +61,7 @@ export function AgentOnboardingPanel({
           typeof error.data === "string" &&
           error.data.trim()
             ? error.data.trim()
-            : "Could not continue. Wait for Agent to finish, then try again.",
+            : "ادامه ممکن نشد. صبر کنید دستیار کارش را تمام کند و دوباره تلاش کنید.",
       });
     } finally {
       setIsApproving(false);
@@ -69,7 +69,7 @@ export function AgentOnboardingPanel({
   }, [approve, isApproving, session, approvalDisabled, revisionKey]);
   const title =
     step === "plan"
-      ? "Tester access"
+      ? "دسترسی آزمایشی"
       : `Example ${labels.entityPlural.toLowerCase()}`;
   return (
     <aside
@@ -102,7 +102,7 @@ export function AgentOnboardingPanel({
         </p>
       ) : isLoading || !session ? (
         <div className="p-4">
-          <AsciiSpinnerText text="Loading setup..." />
+          <AsciiSpinnerText text="در حال بارگذاری راه‌اندازی…" />
         </div>
       ) : (
         <>
@@ -129,7 +129,7 @@ export function AgentOnboardingPanel({
                     text={`Creating example ${labels.entityPlural.toLowerCase()}...`}
                   />
                 ) : (
-                  "Tell Agent who you want to reach in the chat."
+                  "در گفتگو به دستیار بگویید دنبال چه کسانی هستید."
                 )}
               </div>
             )}
@@ -147,7 +147,7 @@ export function AgentOnboardingPanel({
                 disabled={isApproving || approvalDisabled}
                 onClick={() => void handleApprove()}
               >
-                {isApproving ? "Continuing..." : "Continue"}
+                {isApproving ? "در حال ادامه…" : "ادامه"}
               </Button>
             </footer>
           ) : null}

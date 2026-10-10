@@ -70,7 +70,7 @@ export function InlinePanelTriggerCard({
       )}
 
       <InlinePostFeatureStrip
-        title="Post"
+        title="پست"
         interactive={isInteractive}
         onOpenPanel={onOpenPanel}
       />

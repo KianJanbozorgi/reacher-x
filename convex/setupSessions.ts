@@ -551,7 +551,7 @@ function buildSetupGenerationReadyMessage(args: {
   useCaseKey: WorkspaceUseCaseKey;
 }) {
   const useCase = getWorkspaceUseCase(args.useCaseKey);
-  return `Review these example ${useCase.entityPlural.toLowerCase()}. Tell me what to change, or continue to finish setup.`;
+  return `این نمونه‌های ${useCase.entityPlural} را بررسی کنید. اگر تغییری لازم است بگویید؛ در غیر این صورت برای تکمیل راه‌اندازی ادامه دهید.`;
 }
 
 function getSetupSessionInputMode(

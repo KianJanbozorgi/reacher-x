@@ -123,7 +123,7 @@ export default function NotificationsPage() {
   return (
     <div className="flex h-full min-h-0 w-full">
       <PageLayout className="flex h-full min-h-0 max-w-none flex-col overflow-hidden border-r-0 md:border-r-0">
-        <PageHeader title="Notifications" onBack={() => router.back()} />
+        <PageHeader title="اعلان‌ها" onBack={() => router.back()} />
         <PageScrollArea>
           <PageContent
             className={`${NOTIFICATIONS_BODY_COLUMN_CLASS_NAME} pt-4 pb-6`}

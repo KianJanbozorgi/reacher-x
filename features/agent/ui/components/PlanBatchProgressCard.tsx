@@ -102,7 +102,7 @@ export function PlanBatchProgressCard({ runId }: { runId: string }) {
   if (run === undefined) {
     return (
       <InlineProgressCard
-        title="Checking plan progress"
+        title="در حال بررسی پیشرفت پلن"
         progress={0}
         status="Loading progress..."
         headerAction={<PlanBatchActivityIndicator />}
@@ -113,7 +113,7 @@ export function PlanBatchProgressCard({ runId }: { runId: string }) {
   if (run === null) {
     return (
       <InlineProgressCard
-        title="Plan progress is unavailable"
+        title="پیشرفت پلن در دسترس نیست"
         progress={0}
         status="This progress update is no longer available."
       />

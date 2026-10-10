@@ -20,7 +20,7 @@ export default function WebAppError({
   return (
     <AppErrorState
       className="min-h-full items-center px-6 py-16"
-      title="We couldn’t load this view."
+      title="بارگذاری این صفحه ممکن نشد."
       description="Please try again, or return to your dashboard."
       onRetry={unstable_retry}
     />

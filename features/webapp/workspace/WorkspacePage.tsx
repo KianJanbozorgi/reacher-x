@@ -360,7 +360,7 @@ export default function WorkspacePage() {
     if (profilesWereEdited && normalizedIcps.length < 1) {
       form.setError("icps", {
         type: "manual",
-        message: "At least one ideal profile is required.",
+        message: "حداقل یک پروفایل مخاطب لازم است.",
       });
       setActiveTab("profiles");
       return "failed" as const;
@@ -390,10 +390,7 @@ export default function WorkspacePage() {
         if (profilesWereEdited) {
           mutationArgs.icps = normalizedIcps.map((icp) => ({
             ...icp,
-            channels:
-              icp.channels.length > 0
-                ? icp.channels
-                : ["X/Twitter", "LinkedIn"],
+            channels: ["X/Twitter"],
           }));
         }
 
@@ -417,10 +414,7 @@ export default function WorkspacePage() {
           rawUserDescription: data.rawUserDescription,
           currentProfiles: normalizedIcps.map((icp) => ({
             ...icp,
-            channels:
-              icp.channels.length > 0
-                ? icp.channels
-                : ["X/Twitter", "LinkedIn"],
+            channels: ["X/Twitter"],
           })),
         });
       }
@@ -448,14 +442,14 @@ export default function WorkspacePage() {
           : data.useCaseKey,
         sourceUrl: data.sourceUrl?.trim() || "",
         icps: regeneratedTargeting
-          ? regeneratedTargeting.profiles
+          ? regeneratedTargeting.profiles.map((profile) => ({
+              ...profile,
+              channels: ["X/Twitter"],
+            }))
           : profilesWereEdited
             ? normalizedIcps.map((icp) => ({
                 ...icp,
-                channels:
-                  icp.channels.length > 0
-                    ? icp.channels
-                    : ["X/Twitter", "LinkedIn"],
+                channels: ["X/Twitter"],
               }))
             : data.icps,
       });
@@ -465,17 +459,17 @@ export default function WorkspacePage() {
         regeneratedTargeting &&
         !regeneratedTargeting.prospectingRestarted
       ) {
-        toast.warning("Workspace and targeting updated", {
+        toast.warning("فضای کاری و معیارهای جستجو به‌روز شدند", {
           description:
-            "The Agent could not restart automatically. Use the Agent status control to start it again.",
+            "دستیار خودکار دوباره شروع نشد. از بخش وضعیت دستیار آن را راه‌اندازی کنید.",
         });
       } else {
         toast.success(
           rawDescriptionChanged
-            ? "Workspace and targeting updated"
+            ? "فضای کاری و معیارهای جستجو به‌روز شدند"
             : workspaceFormHasChanges
-              ? "Workspace updated"
-              : "Agent settings updated"
+              ? "فضای کاری به‌روز شد"
+              : "تنظیمات دستیار به‌روز شد"
         );
       }
       setAutonomyConfirmationOpen(false);
@@ -483,9 +477,9 @@ export default function WorkspacePage() {
       return "saved" as const;
     } catch (error) {
       logger.error("Workspace save failed", error);
-      toast.error("Could not save", {
+      toast.error("ذخیره ممکن نشد", {
         description:
-          error instanceof Error ? error.message : "Please try again.",
+          error instanceof Error ? error.message : "لطفاً دوباره تلاش کنید.",
       });
       return "failed" as const;
     }
@@ -577,14 +571,14 @@ export default function WorkspacePage() {
   const canCreateWorkspace = workspaceCreationEligibility?.allowed === true;
   const workspaceCreationBlockedReason =
     workspaceCreationEligibility?.reason ??
-    "Workspace limit reached for your current plan.";
+    "به سقف فضای کاری پلن خود رسیده‌اید.";
 
   const isHydrating = isAuthenticated && workspace === undefined;
   if (authLoading || isHydrating) {
     return (
       <div className={workspacePageShellClassName}>
         <PageLayout className={workspaceMainColumnClassName}>
-          <PageHeader className="border-b-0" title="Workspace" />
+          <PageHeader className="border-b-0" title="فضای کاری" />
           <WorkspacePageSkeleton
             bodyColumnClassName={workspaceBodyColumnClassName}
           />
@@ -599,7 +593,7 @@ export default function WorkspacePage() {
         <PageLayout className={workspaceMainColumnClassName}>
           <PageHeader
             className="border-b-0"
-            title="Workspace"
+            title="فضای کاری"
             titleSuffix={
               workspace ? (
                 <span className="text-muted-foreground ml-1 text-xs font-normal">
@@ -642,13 +636,13 @@ export default function WorkspacePage() {
                         <Button
                           size="xsIcon"
                           variant="outline"
-                          aria-label="Workspace menu"
+                          aria-label="منوی فضای کاری"
                         >
                           <MoreHorizIcon className="fill-muted-foreground" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="min-w-48">
-                        <DropdownMenuLabel>↳ Menu</DropdownMenuLabel>
+                        <DropdownMenuLabel>↳ منو</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onSelect={() => openMenuDialog(setDeleteOpen)}
@@ -712,9 +706,9 @@ export default function WorkspacePage() {
                   {authError && (
                     <div className="px-4">
                       <Alert variant="destructive" className="mb-6">
-                        <AlertTitle>Could not load workspace</AlertTitle>
+                        <AlertTitle>بارگذاری فضای کاری ممکن نشد</AlertTitle>
                         <AlertDescription>
-                          {authError.message ?? "Please refresh."}
+                          {authError.message ?? "لطفاً صفحه را تازه کنید."}
                         </AlertDescription>
                       </Alert>
                     </div>
@@ -724,7 +718,7 @@ export default function WorkspacePage() {
                     <TabsContent value="details" className="mt-0">
                       {isEditing ? (
                         <Alert className="mb-4">
-                          <AlertTitle>Note</AlertTitle>
+                          <AlertTitle>توجه</AlertTitle>
                           <AlertDescription>
                             Changing who you want to reach regenerates the
                             agent's description and AI-generated profiles.
@@ -882,7 +876,7 @@ export default function WorkspacePage() {
                     <TabsContent value="profiles" className="mt-0">
                       {isEditing ? (
                         <Alert>
-                          <AlertTitle>Note</AlertTitle>
+                          <AlertTitle>توجه</AlertTitle>
                           <AlertDescription>
                             Profiles you add or edit become manual profiles and
                             stay unchanged when the description is updated.
@@ -928,7 +922,7 @@ export default function WorkspacePage() {
                                     />{" "}
                                     ·{" "}
                                     {field.provenance === "manual"
-                                      ? "Manual"
+                                      ? "دستی"
                                       : AGENT_GENERATED_PROFILE_LABEL}
                                   </span>
                                   <Button
@@ -938,8 +932,8 @@ export default function WorkspacePage() {
                                     disabled={fields.length <= 1}
                                     title={
                                       fields.length <= 1
-                                        ? "At least one profile is required."
-                                        : "Delete profile"
+                                        ? "حداقل یک پروفایل لازم است."
+                                        : "حذف پروفایل"
                                     }
                                     onClick={() => {
                                       if (fields.length > 1) remove(index);
@@ -1011,7 +1005,7 @@ export default function WorkspacePage() {
                                         <FormLabel
                                           className={formLabelClassName}
                                         >
-                                          What they need ·{" "}
+                                          نیازهای آن‌ها ·{" "}
                                           <AnimatedNumber
                                             value={f.value?.length ?? 0}
                                           />
@@ -1041,13 +1035,13 @@ export default function WorkspacePage() {
                                   title: "",
                                   description: "",
                                   painPoints: [],
-                                  channels: ["X/Twitter", "LinkedIn"],
+                                  channels: ["X/Twitter"],
                                   provenance: "manual",
                                 })
                               }
                             >
                               <AddIcon className="fill-current" />
-                              Add profile
+                              افزودن پروفایل
                             </Button>
                           </div>
                         </Form>
@@ -1063,7 +1057,7 @@ export default function WorkspacePage() {
                               aria-hidden="true"
                             />
                           }
-                          title="Ask before sending"
+                          title="پیش از ارسال تأیید بگیر"
                           description={
                             <>
                               When off, existing and future plans start
@@ -1075,7 +1069,7 @@ export default function WorkspacePage() {
                             <Switch
                               checked={isAgentReviewRequired}
                               disabled={agentControlsDisabled}
-                              aria-label="Toggle ask before sending"
+                              aria-label="تغییر وضعیت تأیید پیش از ارسال"
                               onCheckedChange={handleAgentAutonomyChange}
                             />
                           }
@@ -1092,9 +1086,9 @@ export default function WorkspacePage() {
                 {authError && (
                   <div className="px-4 pt-4">
                     <Alert variant="destructive" className="mb-6">
-                      <AlertTitle>Could not load workspace</AlertTitle>
+                      <AlertTitle>بارگذاری فضای کاری ممکن نشد</AlertTitle>
                       <AlertDescription>
-                        {authError.message ?? "Please refresh."}
+                        {authError.message ?? "لطفاً صفحه را تازه کنید."}
                       </AlertDescription>
                     </Alert>
                   </div>
@@ -1103,7 +1097,7 @@ export default function WorkspacePage() {
                 {isAuthenticated && workspace === null && !authLoading && (
                   <div className="px-4 pt-4">
                     <Alert className="mb-6">
-                      <AlertTitle>No workspace yet</AlertTitle>
+                      <AlertTitle>هنوز فضای کاری ندارید</AlertTitle>
                       <AlertDescription>
                         Finish setup to create your workspace.
                         <div className="mt-3">
@@ -1125,7 +1119,7 @@ export default function WorkspacePage() {
                 {!isAuthenticated && !authLoading && (
                   <div className="px-4 pt-4">
                     <Alert className="mb-6">
-                      <AlertTitle>Account required</AlertTitle>
+                      <AlertTitle>حساب کاربری لازم است</AlertTitle>
                       <AlertDescription>
                         <Button size="xs" onClick={() => router.push("/login")}>
                           Sign in
@@ -1146,14 +1140,14 @@ export default function WorkspacePage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Turn off sending approvals?</AlertDialogTitle>
+            <AlertDialogTitle>تأیید ارسال پیام‌ها غیرفعال شود؟</AlertDialogTitle>
             <AlertDialogDescription className="space-y-2">
               <span className="block">
                 {workspacePlanStartPreview === undefined
-                  ? "Checking existing draft outreach plans…"
+                  ? "در حال بررسی پیش‌نویس‌های پیام‌رسانی…"
                   : workspacePlanStartPreview.draftPlanCount > 0
                     ? `This will gradually start ${workspacePlanStartPreview.draftPlanCount.toLocaleString()}${workspacePlanStartPreview.draftPlanCountIsCapped ? "+" : ""} existing draft outreach plan${workspacePlanStartPreview.draftPlanCount === 1 ? "" : "s"}.`
-                    : "Future outreach plans will start automatically."}
+                    : "برنامه‌های پیام‌رسانی آینده خودکار آغاز می‌شوند."}
               </span>
               <span className="block">
                 Replies and DMs may send without further approval. Wait steps
@@ -1183,7 +1177,7 @@ export default function WorkspacePage() {
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent onCloseAutoFocus={(e) => e.preventDefault()}>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete workspace?</AlertDialogTitle>
+            <AlertDialogTitle>فضای کاری حذف شود؟</AlertDialogTitle>
             <AlertDialogDescription>
               This permanently deletes all profiles, archives, and stats for
               this workspace
@@ -1193,7 +1187,7 @@ export default function WorkspacePage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>انصراف</AlertDialogCancel>
             <AlertDialogAction onClick={() => void runDelete()}>
               Delete
             </AlertDialogAction>

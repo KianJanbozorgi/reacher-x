@@ -24,7 +24,7 @@ export function AgentOnboardingPanelSpinner({
         <Spinner
           variant="circle"
           className="size-5"
-          aria-label="Loading onboarding draft"
+          aria-label="در حال بارگذاری پیش‌نویس راه‌اندازی"
         />
       </div>
     </aside>

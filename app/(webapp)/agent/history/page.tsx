@@ -71,7 +71,7 @@ export default function AgentHistoryPage() {
   if (!prospectId && !workspace?._id) {
     return (
       <PageLayout className="max-w-none border-r-0">
-        <PageHeader title="History" onBack={handleClose} />
+        <PageHeader title="تاریخچه" onBack={handleClose} />
         <PageContent>
           <p className="text-muted-foreground py-8 text-center text-sm">
             No workspace or {entitySingularLower} selected

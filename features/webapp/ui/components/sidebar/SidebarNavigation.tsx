@@ -56,7 +56,7 @@ export function SidebarNavigation() {
     <>
       {/* People Group */}
       <SidebarGroup>
-        <SidebarGroupLabel>People</SidebarGroupLabel>
+        <SidebarGroupLabel>افراد</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             {/* Prospects */}
@@ -130,12 +130,12 @@ export function SidebarNavigation() {
 
       {/* Agent Group */}
       <SidebarGroup>
-        <SidebarGroupLabel>Agent</SidebarGroupLabel>
+        <SidebarGroupLabel>دستیار</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip="Agent"
+                tooltip="دستیار"
                 isActive={isAgentRoute}
                 disabled={locked}
                 asChild={!locked}
@@ -143,19 +143,19 @@ export function SidebarNavigation() {
                 {locked ? (
                   <>
                     <ChangeHistoryIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Agent</span>
+                    <span className="truncate">دستیار</span>
                   </>
                 ) : (
                   <Link href="/agent">
                     <ChangeHistoryIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Agent</span>
+                    <span className="truncate">دستیار</span>
                   </Link>
                 )}
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip="Agent observability"
+                tooltip="وضعیت دستیار"
                 isActive={pathname === "/agent-ops"}
                 disabled={locked}
                 asChild={!locked}
@@ -163,12 +163,12 @@ export function SidebarNavigation() {
                 {locked ? (
                   <>
                     <ActivityZoneIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Agent observability</span>
+                    <span className="truncate">وضعیت دستیار</span>
                   </>
                 ) : (
                   <Link href="/agent-ops">
                     <ActivityZoneIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Agent observability</span>
+                    <span className="truncate">وضعیت دستیار</span>
                   </Link>
                 )}
               </SidebarMenuButton>
@@ -179,7 +179,7 @@ export function SidebarNavigation() {
 
       {/* Insights Group */}
       <SidebarGroup>
-        <SidebarGroupLabel>Insights</SidebarGroupLabel>
+        <SidebarGroupLabel>بینش‌ها</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -208,12 +208,12 @@ export function SidebarNavigation() {
 
       {/* Accounts Group */}
       <SidebarGroup>
-        <SidebarGroupLabel>Accounts</SidebarGroupLabel>
+        <SidebarGroupLabel>حساب کاربری</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip="Plans"
+                tooltip="پلن‌ها"
                 isActive={pathname === "/plans"}
                 disabled={locked}
                 asChild={!locked}
@@ -221,19 +221,19 @@ export function SidebarNavigation() {
                 {locked ? (
                   <>
                     <CreditCardIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Plans</span>
+                    <span className="truncate">پلن‌ها</span>
                   </>
                 ) : (
                   <Link href="/plans">
                     <CreditCardIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Plans</span>
+                    <span className="truncate">پلن‌ها</span>
                   </Link>
                 )}
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip="Usage"
+                tooltip="میزان استفاده"
                 isActive={pathname === "/usage"}
                 disabled={locked}
                 asChild={!locked}
@@ -241,12 +241,12 @@ export function SidebarNavigation() {
                 {locked ? (
                   <>
                     <DataUsageIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Usage</span>
+                    <span className="truncate">میزان استفاده</span>
                   </>
                 ) : (
                   <Link href="/usage">
                     <DataUsageIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Usage</span>
+                    <span className="truncate">میزان استفاده</span>
                   </Link>
                 )}
               </SidebarMenuButton>
@@ -258,9 +258,9 @@ export function SidebarNavigation() {
                 className="group/collapsible [&[data-state=open]>button>svg:last-child]:rotate-90"
               >
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip="Settings" disabled={locked}>
+                  <SidebarMenuButton tooltip="تنظیمات" disabled={locked}>
                     <SettingsIcon className="fill-sidebar-foreground" />
-                    <span className="truncate">Settings</span>
+                    <span className="truncate">تنظیمات</span>
                     <ChevronRightIcon className="fill-sidebar-foreground ms-auto rotate-180 transition-transform" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
@@ -268,7 +268,7 @@ export function SidebarNavigation() {
                   <SidebarMenuSub>
                     <SidebarMenuItem>
                       <SidebarMenuButton
-                        tooltip="Connected accounts"
+                        tooltip="حساب‌های متصل"
                         isActive={pathname === "/settings/connected-accounts"}
                         disabled={locked}
                         asChild={!locked}
@@ -276,12 +276,12 @@ export function SidebarNavigation() {
                         {locked ? (
                           <>
                             <ManageAccountsIcon className="fill-sidebar-foreground" />
-                            <span className="truncate">Connected accounts</span>
+                            <span className="truncate">حساب‌های متصل</span>
                           </>
                         ) : (
                           <Link href="/settings/connected-accounts">
                             <ManageAccountsIcon className="fill-sidebar-foreground" />
-                            <span className="truncate">Connected accounts</span>
+                            <span className="truncate">حساب‌های متصل</span>
                           </Link>
                         )}
                       </SidebarMenuButton>

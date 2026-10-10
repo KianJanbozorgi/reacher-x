@@ -38,15 +38,15 @@ export function ConnectionsStepContent({
         <PageContent className="min-w-0 overflow-x-hidden px-4 py-4">
           <header className="space-y-1">
             <h2 className="text-xl font-semibold">
-              Let the △ Agent take action
+              اجازه دهید دستیار اقدام کند
             </h2>
             <p className="text-muted-foreground text-sm wrap-break-word">
-              Connect your accounts so the Agent can{" "}
-              <span className="text-foreground">send DMs</span>,{" "}
-              <span className="text-foreground">reply to posts</span>, and{" "}
-              <span className="text-foreground">engage on your behalf</span>.
-              You can also{" "}
-              <span className="text-foreground">connect them later</span>.
+              حساب خود را متصل کنید تا دستیار بتواند{" "}
+              <span className="text-foreground">پیام مستقیم بفرستد</span>،{" "}
+              <span className="text-foreground">به پست‌ها پاسخ دهد</span> و{" "}
+              <span className="text-foreground">از طرف شما تعامل کند</span>.
+              همچنین می‌توانید{" "}
+              <span className="text-foreground">بعداً آن را متصل کنید</span>.
             </p>
           </header>
 
@@ -61,7 +61,7 @@ export function ConnectionsStepContent({
 
             {isMutating ? (
               <p className="text-muted-foreground mt-2 text-xs">
-                Updating account status…
+                در حال به‌روزرسانی وضعیت حساب…
               </p>
             ) : null}
           </div>
@@ -79,7 +79,7 @@ export function ConnectionsStepContent({
             disabled={isCompletingStep}
             onClick={() => void onConnectLater()}
           >
-            Connect later
+            اتصال در آینده
           </Button>
           <Button
             type="button"
@@ -87,7 +87,7 @@ export function ConnectionsStepContent({
             disabled={continueDisabled}
             onClick={() => void onContinue()}
           >
-            Continue
+            ادامه
           </Button>
         </div>
       </div>

@@ -10,7 +10,7 @@ import { useQueryWithStatus } from "./useQueryWithStatus";
 import { usePreferredShellContext } from "@/shared/stores/preferredShellContext";
 
 const ONBOARDING_DELAYED_FALLBACK_MESSAGE =
-  "Setup is taking longer than expected. Agent is retrying automatically.";
+  "راه‌اندازی بیش از انتظار طول کشیده است. دستیار دوباره تلاش می‌کند.";
 
 /**
  * Shows safe onboarding status toasts based on canonical workspace navigation state.
@@ -54,7 +54,7 @@ export function useOnboardingStatusToast() {
       issueStatus === "delayed" &&
       lastIssueStatusRef.current !== "delayed"
     ) {
-      toast.info("Workspace setup update", {
+      toast.info("به‌روزرسانی راه‌اندازی فضای کاری", {
         id: "onboarding-delayed",
         description: issueMessage,
       });
@@ -66,9 +66,9 @@ export function useOnboardingStatusToast() {
         navigationState.readyQualifiedEnrichedCount) > 0 &&
       !readyToastShownRef.current
     ) {
-      toast.success(`Your ${entityPlural.toLowerCase()} are ready`, {
+      toast.success(`نتایج ${entityPlural.toLowerCase()} آماده‌اند`, {
         id: "onboarding-ready",
-        description: "New matches are ready to view.",
+        description: "نتایج تازه آمادهٔ مشاهده‌اند.",
       });
       readyToastShownRef.current = true;
       toast.dismiss("onboarding-delayed");

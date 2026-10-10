@@ -15,7 +15,7 @@ import {
 
 export const APP_NAME = "🆁 ReacherX";
 export const APP_DESCRIPTION =
-  "Open-source, self-improving △ Agent that finds the people you need in real time.";
+  "دستیار کشف فرصت در X/Twitter برای یافتن افراد و گفتگوهای مرتبط.";
 
 export function createPageMetadata(
   title: string,

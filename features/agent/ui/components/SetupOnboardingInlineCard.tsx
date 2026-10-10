@@ -74,7 +74,7 @@ export function SetupOnboardingInlineCard({
         }
         status={
           <AsciiSpinnerText
-            text="Working..."
+            text="در حال کار…"
             className="text-muted-foreground text-xs"
           />
         }
@@ -95,7 +95,7 @@ export function SetupOnboardingInlineCard({
       footerAction={
         onContinue ? (
           <Button size="xs" onClick={onContinue}>
-            {reviewing ? "Review" : title}
+            {reviewing ? "بررسی" : title}
           </Button>
         ) : undefined
       }

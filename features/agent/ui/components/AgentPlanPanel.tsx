@@ -159,7 +159,7 @@ export function AgentPlanPanel({
     >
       <PageLayout className="flex flex-col md:w-full">
         <PageHeader
-          title="Outreach plan"
+          title="برنامهٔ پیام‌رسانی"
           onBack={onClose}
           titleSuffix={
             plan ? (

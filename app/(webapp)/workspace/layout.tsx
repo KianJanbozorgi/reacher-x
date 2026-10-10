@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { createPageMetadata } from "@/shared/lib/metadata";
 
-export const metadata: Metadata = createPageMetadata("Workspace Setup");
+export const metadata: Metadata = createPageMetadata("راه‌اندازی فضای کاری");
 
 export default function WorkspaceSetupLayout({
   children,

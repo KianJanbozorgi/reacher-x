@@ -169,7 +169,7 @@ function ConversationPanelLoadingSkeleton({
       )}
     >
       <PageLayout className="flex h-full max-w-[520px] flex-col md:w-full md:max-w-[520px]">
-        <PageHeader title="Messages" onBack={onBack} />
+        <PageHeader title="پیام‌ها" onBack={onBack} />
         <ScrollArea className="min-h-0 flex-1" viewportClassName="pb-4">
           <PageContent className="space-y-4 px-4 py-4">
             <div className="space-y-4">
@@ -593,7 +593,7 @@ export function AgentDynamicPanel({
     ) : draftSync.status === "error" ? (
       <span
         className="block w-full truncate text-xs text-amber-600"
-        title="Draft sync failed. We'll retry on your next edit."
+        title="همگام‌سازی پیش‌نویس ناموفق بود. با ویرایش بعدی دوباره تلاش می‌کنیم."
       >
         Draft sync failed. We&apos;ll retry on your next edit.
       </span>
