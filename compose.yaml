@@ -5,28 +5,17 @@ services:
       args:
         NEXT_PUBLIC_CONVEX_URL: ${NEXT_PUBLIC_CONVEX_URL:?Set NEXT_PUBLIC_CONVEX_URL}
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?Set NEXT_PUBLIC_SITE_URL}
-      secrets:
-        - app_env
     environment:
       NEXT_PUBLIC_CONVEX_URL: ${NEXT_PUBLIC_CONVEX_URL:?Set NEXT_PUBLIC_CONVEX_URL}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?Set NEXT_PUBLIC_SITE_URL}
       AUTH_JWT_PRIVATE_KEY: ${AUTH_JWT_PRIVATE_KEY:?Set AUTH_JWT_PRIVATE_KEY}
       AUTH_ISSUER_URL: ${AUTH_ISSUER_URL:?Set AUTH_ISSUER_URL}
-      AUTH_CODE_SECRET: ${AUTH_CODE_SECRET:?Set AUTH_CODE_SECRET}
-      AUTH_INVITE_CODE: ${AUTH_INVITE_CODE:?Set AUTH_INVITE_CODE}
-      AUTH_EMAIL_FROM: ${AUTH_EMAIL_FROM:-}
-      RESEND_API_KEY: ${RESEND_API_KEY:-}
       AUTH_DB_PATH: /app/data/auth.sqlite
-      PRIVATE_ALLOWED_EMAILS: ${PRIVATE_ALLOWED_EMAILS:?Set PRIVATE_ALLOWED_EMAILS}
     volumes:
       - auth_data:/app/data
     ports:
       - "${APP_BIND_IP:-0.0.0.0}:${APP_PORT:-3000}:3000"
     restart: unless-stopped
-
-secrets:
-  app_env:
-    file: .env
 
 volumes:
   auth_data:

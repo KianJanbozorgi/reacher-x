@@ -10,7 +10,6 @@ vi.mock("@/shared/lib/localAuth/session", () => ({
 
 beforeEach(() => {
   auth.account = null;
-  process.env.PRIVATE_ALLOWED_EMAILS = "tester@example.test";
 });
 
 test.each(["/home", "/pricing", "/blog", "/demo", "/post/linkedin/123"])(
@@ -21,7 +20,7 @@ test.each(["/home", "/pricing", "/blog", "/demo", "/post/linkedin/123"])(
   }
 );
 
-test.each(["/login", "/signup", "/forgot-password", "/reset-password", "/api/auth/login"])(
+test.each(["/login", "/signup", "/api/auth/login"])(
   "local auth route %s is reachable without a session",
   async (path) => {
     const response = await proxy(new NextRequest(`https://app.example.test${path}`));
@@ -35,15 +34,22 @@ test("private routes redirect anonymous visitors to local login", async () => {
   expect(response.headers.get("location")).toBe("https://app.example.test/login?returnTo=%2Fagent%2Fsetup");
 });
 
-test("allowed local accounts can access the application", async () => {
+test("signed-in local accounts can access the application", async () => {
   auth.account = { email: "tester@example.test" };
   const response = await proxy(new NextRequest("https://app.example.test/agent"));
   expect(response.status).toBe(200);
   expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
 });
 
-test("accounts removed from the allowlist lose access", async () => {
+test("signed-in accounts do not require an email allowlist", async () => {
   auth.account = { email: "other@example.test" };
   const response = await proxy(new NextRequest("https://app.example.test/agent"));
-  expect(response.status).toBe(403);
+  expect(response.status).toBe(200);
 });
+
+test.each(["/forgot-password", "/reset-password", "/api/auth/reset/request", "/api/auth/reset/confirm"])(
+  "disabled recovery route %s returns 404", async (path) => {
+    const response = await proxy(new NextRequest(`https://app.example.test${path}`));
+    expect(response.status).toBe(404);
+  }
+);

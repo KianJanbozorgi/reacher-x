@@ -21,8 +21,7 @@ ENV NEXT_PUBLIC_CONVEX_URL=$NEXT_PUBLIC_CONVEX_URL \
     BROWSERSLIST_IGNORE_OLD_DATA=true \
     BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA=true
 RUN pnpm exec tsx scripts/validate-blog-assets.ts
-# Node parses the dotenv file as data; Docker does not copy it into an image layer.
-RUN --mount=type=secret,id=app_env,required=true --mount=type=secret,id=proxy_ca \
+RUN --mount=type=secret,id=proxy_ca \
     if [ -f /run/secrets/proxy_ca ]; then export NODE_EXTRA_CA_CERTS=/run/secrets/proxy_ca; fi; \
     node scripts/docker-build.mjs
 

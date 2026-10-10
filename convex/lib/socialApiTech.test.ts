@@ -5,7 +5,6 @@ import {
   normalizeTechPosts,
   UnsupportedSocialApiOperation,
 } from "./socialApiTech";
-import { isPrivateUser } from "../../shared/lib/privateAccess";
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -59,10 +58,4 @@ test("retries a temporary SocialAPI.tech search failure", async () => {
   expect(response.ok).toBe(true);
   expect((await response.json()).tweets).toHaveLength(1);
   expect(fetcher).toHaveBeenCalledTimes(2);
-});
-
-test("private access requires an exact allowed email", () => {
-  expect(isPrivateUser(" kian84.c16@gmail.com ", "kian84.c16@gmail.com")).toBe(true);
-  expect(isPrivateUser("other@gmail.com", "kian84.c16@gmail.com")).toBe(false);
-  expect(isPrivateUser(null, "kian84.c16@gmail.com")).toBe(false);
 });

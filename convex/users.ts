@@ -63,14 +63,6 @@ export const createOrUpdateUser = mutation({
       // Return the existing user's ID
       return existingUser._id;
     } else {
-      // The first local sign-in adopts records created under WorkOS.
-      // Local signup requires both the private email allowlist and operator invitation.
-      const previousUser = await ctx.db.query("users")
-        .withIndex("by_email", (q) => q.eq("email", identity.email!)).first();
-      if (previousUser) {
-        await ctx.db.patch(previousUser._id, { workosUserId: identity.subject });
-        return previousUser._id;
-      }
       // Create new user
       const userId = await ctx.db.insert("users", {
         workosUserId: args.workosUserId,

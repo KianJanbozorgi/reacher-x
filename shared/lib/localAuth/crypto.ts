@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHash, createHmac, randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
 
 function scrypt(password: string, salt: string, length: number): Promise<Buffer> {
   return new Promise((resolve, reject) => scryptCallback(password, salt, length,
@@ -29,16 +29,4 @@ export async function verifyPassword(password: string, stored: string): Promise<
   const expected = Buffer.from(value, "base64url");
   const actual = await scrypt(password, salt, expected.length);
   return expected.length === actual.length && timingSafeEqual(expected, actual);
-}
-
-export function hashCode(email: string, purpose: string, code: string): string {
-  const secret = process.env.AUTH_CODE_SECRET;
-  if (!secret || secret.length < 32) throw new Error("AUTH_CODE_SECRET must contain at least 32 characters.");
-  return createHmac("sha256", secret).update(`${email}:${purpose}:${code}`).digest("hex");
-}
-
-export function equalDigest(a: string, b: string): boolean {
-  const x = Buffer.from(a, "hex");
-  const y = Buffer.from(b, "hex");
-  return x.length === y.length && timingSafeEqual(x, y);
 }

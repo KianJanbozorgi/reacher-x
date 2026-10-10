@@ -1,4 +1,3 @@
-import { isPrivateUser } from "../../shared/lib/privateAccess";
 import {
   action as rawAction,
   httpAction,
@@ -31,9 +30,6 @@ const withTriggerAwareDb = customCtx<MutationCtx, Pick<MutationCtx, "db">>(
 const privateAccess = customCtx(async (ctx: { auth: { getUserIdentity: () => Promise<{ email?: string } | null> } }) => {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) throw new Error("Please sign in to continue.");
-  if (!isPrivateUser(identity.email, process.env.PRIVATE_ALLOWED_EMAILS)) {
-    throw new Error("This application is private. Contact the administrator for access.");
-  }
   return {};
 });
 
@@ -161,9 +157,7 @@ function wrapFunctionBuilderWithWideEventLogging<TBuilder extends BuilderLike>(
 export const mutation = wrapFunctionBuilderWithWideEventLogging(
   customMutation(rawMutation, customCtx(async (ctx: MutationCtx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!isPrivateUser(identity?.email, process.env.PRIVATE_ALLOWED_EMAILS)) {
-      throw new Error("This application is private. Please sign in with an authorized account.");
-    }
+    if (!identity) throw new Error("Please sign in to continue.");
     return { db: triggers.wrapDB(ctx).db };
   })),
   "mutation"
