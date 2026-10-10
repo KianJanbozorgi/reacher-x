@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { HandleAuthSuccessData } from "@workos-inc/authkit-nextjs";
+import type { LocalUser } from "@/shared/lib/localAuth/client";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
 import {
@@ -10,9 +10,9 @@ import {
   type PostAuthUserProfile,
 } from "./postAuthBootstrapCore";
 
-type AuthKitUser = HandleAuthSuccessData["user"];
+type LocalAuthUser = LocalUser;
 
-function toPostAuthUserProfile(user: AuthKitUser): PostAuthUserProfile {
+function toPostAuthUserProfile(user: LocalAuthUser): PostAuthUserProfile {
   return {
     workosUserId: user.id,
     email: user.email,
@@ -27,7 +27,7 @@ export async function bootstrapPostAuthSetup({
   user,
 }: {
   accessToken: string;
-  user: AuthKitUser;
+  user: LocalAuthUser;
 }): Promise<PostAuthBootstrapResult> {
   const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
   if (!convexUrl) {

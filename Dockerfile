@@ -15,10 +15,8 @@ FROM dependencies AS builder
 COPY . .
 ARG NEXT_PUBLIC_CONVEX_URL
 ARG NEXT_PUBLIC_SITE_URL
-ARG NEXT_PUBLIC_WORKOS_REDIRECT_URI
 ENV NEXT_PUBLIC_CONVEX_URL=$NEXT_PUBLIC_CONVEX_URL \
     NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
-    NEXT_PUBLIC_WORKOS_REDIRECT_URI=$NEXT_PUBLIC_WORKOS_REDIRECT_URI \
     NEXT_TELEMETRY_DISABLED=1 \
     BROWSERSLIST_IGNORE_OLD_DATA=true \
     BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA=true
@@ -34,6 +32,7 @@ ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
+RUN mkdir -p /app/data && chown node:node /app/data
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \

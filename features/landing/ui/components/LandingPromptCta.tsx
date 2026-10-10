@@ -5,7 +5,7 @@ import type { ClipboardEvent } from "react";
 import Link from "next/link";
 import type { SerializedEditorState } from "lexical";
 import { useMutation } from "convex/react";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth } from "@/shared/lib/localAuth/client";
 import { toast } from "sonner";
 import { ComposerEditor } from "@/features/composer/lib/ComposerEditor";
 import type { ComposerEditorAPI } from "@/features/composer/lib/ToolbarBridgePlugin";

@@ -2,15 +2,14 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-test("the auth callback resolves onboarding before choosing its redirect", () => {
-  const callbackRoute = readFileSync("app/callback/route.ts", "utf8");
-
-  assert.match(callbackRoute, /handleAuth\(\{[\s\S]*onSuccess:/);
-  assert.match(callbackRoute, /bootstrapPostAuthSetup/);
-  assert.match(callbackRoute, /applyPostAuthRedirect/);
+test("local login initializes onboarding and sets a server session", () => {
+  const authHandler = readFileSync("shared/lib/localAuth/http.ts", "utf8");
+  assert.match(authHandler, /createSession\(accountId\)/);
+  assert.match(authHandler, /bootstrapPostAuthSetup/);
+  assert.match(authHandler, /sessionCookieOptions\(\)/);
 });
 
-test("AuthKit receives server-hydrated auth behind a Suspense boundary", () => {
+test("local auth receives server-hydrated session behind a Suspense boundary", () => {
   const serverProvider = readFileSync("app/ConvexClientProvider.tsx", "utf8");
   const clientProvider = readFileSync(
     "app/ConvexClientProviderClient.tsx",
@@ -18,8 +17,8 @@ test("AuthKit receives server-hydrated auth behind a Suspense boundary", () => {
   );
   const rootLayout = readFileSync("app/layout.tsx", "utf8");
 
-  assert.match(serverProvider, /await withAuth\(\)/);
-  assert.match(clientProvider, /<AuthKitProvider initialAuth=\{initialAuth\}>/);
+  assert.match(serverProvider, /await currentAccount\(\)/);
+  assert.match(clientProvider, /<LocalAuthProvider user=\{initialAuth\}>/);
   assert.match(
     rootLayout,
     /<Suspense fallback=\{null\}>\s*<ConvexClientProvider>/

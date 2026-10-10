@@ -1,20 +1,14 @@
-const clientId = process.env.WORKOS_CLIENT_ID;
+const issuer = process.env.AUTH_ISSUER_URL?.replace(/\/$/, "");
+if (!issuer) throw new Error("AUTH_ISSUER_URL is required for local authentication.");
 
 const authConfig = {
   providers: [
     {
       type: "customJwt",
-      issuer: `https://api.workos.com/`,
+      issuer,
       algorithm: "RS256",
-      applicationID: clientId,
-      jwks: `https://api.workos.com/sso/jwks/${clientId}`,
-    },
-    {
-      type: "customJwt",
-      issuer: `https://api.workos.com/user_management/${clientId}`,
-      algorithm: "RS256",
-      jwks: `https://api.workos.com/sso/jwks/${clientId}`,
-      applicationID: clientId,
+      applicationID: "reacher-x",
+      jwks: `${issuer}/auth/jwks`,
     },
   ],
 };

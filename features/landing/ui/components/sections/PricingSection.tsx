@@ -2,7 +2,7 @@
 
 import React, { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth } from "@/shared/lib/localAuth/client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 

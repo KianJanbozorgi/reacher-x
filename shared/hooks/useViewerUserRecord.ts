@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useConvexAuth, useMutation } from "convex/react";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { api } from "@/convex/_generated/api";
 import { logger } from "@/shared/lib/logger";
 import { useQueryWithStatus } from "./useQueryWithStatus";
@@ -8,7 +8,7 @@ import { useQueryWithStatus } from "./useQueryWithStatus";
 export function useViewerUserRecord() {
   const { isAuthenticated: convexAuthenticated, isLoading: convexLoading } =
     useConvexAuth();
-  const { user: workosUser, loading: workosLoading } = useWorkosAuth();
+  const { user: localUser, loading: localAuthLoading } = useLocalAuth();
   const storeUser = useMutation(api.users.createOrUpdateUser);
   const hasStoredUserRef = useRef(false);
 
@@ -19,7 +19,7 @@ export function useViewerUserRecord() {
   const currentUser = currentUserQuery.data ?? null;
 
   useEffect(() => {
-    if (!convexAuthenticated || !workosUser) {
+    if (!convexAuthenticated || !localUser) {
       hasStoredUserRef.current = false;
       return;
     }
@@ -33,11 +33,11 @@ export function useViewerUserRecord() {
     void (async () => {
       try {
         await storeUser({
-          workosUserId: workosUser.id,
-          email: workosUser.email,
-          firstName: workosUser.firstName || undefined,
-          lastName: workosUser.lastName || undefined,
-          profileImageUrl: workosUser.profilePictureUrl || undefined,
+          workosUserId: localUser.id,
+          email: localUser.email,
+          firstName: localUser.firstName || undefined,
+          lastName: localUser.lastName || undefined,
+          profileImageUrl: localUser.profilePictureUrl || undefined,
         });
         hasStoredUserRef.current = true;
       } catch (error) {
@@ -51,11 +51,11 @@ export function useViewerUserRecord() {
     currentUserQuery.isError,
     currentUserQuery.isPending,
     storeUser,
-    workosUser,
+    localUser,
   ]);
 
   const isProvisioning = useMemo(() => {
-    if (!convexAuthenticated || !workosUser) {
+    if (!convexAuthenticated || !localUser) {
       return false;
     }
     return (
@@ -66,13 +66,13 @@ export function useViewerUserRecord() {
     currentUser,
     currentUserQuery.isError,
     currentUserQuery.isPending,
-    workosUser,
+    localUser,
   ]);
 
   return {
     currentUser,
     currentUserQuery,
-    isLoading: convexLoading || workosLoading || isProvisioning,
+    isLoading: convexLoading || localAuthLoading || isProvisioning,
     isProvisioning,
   };
 }

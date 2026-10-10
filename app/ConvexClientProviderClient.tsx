@@ -2,54 +2,46 @@
 
 import { type ReactNode, useCallback } from "react";
 import { ConvexProviderWithAuth } from "convex/react";
-import {
-  AuthKitProvider,
-  useAccessToken,
-  useAuth as useWorkosAuth,
-} from "@workos-inc/authkit-nextjs/components";
-import type { NoUserInfo, UserInfo } from "@workos-inc/authkit-nextjs";
+import { LocalAuthProvider, useAuth as useLocalAuth, type LocalUser } from "@/shared/lib/localAuth/client";
 import { convex } from "@/shared/lib/convex";
-
-export type AuthKitInitialAuth = Omit<UserInfo | NoUserInfo, "accessToken">;
 
 export function ConvexClientProviderClient({
   children,
   initialAuth,
 }: {
   children: ReactNode;
-  initialAuth: AuthKitInitialAuth;
+  initialAuth: LocalUser | null;
 }) {
   return (
-    <AuthKitProvider initialAuth={initialAuth}>
-      <ConvexProviderWithAuth client={convex} useAuth={useAuthFromWorkos}>
+    <LocalAuthProvider user={initialAuth}>
+      <ConvexProviderWithAuth client={convex} useAuth={useAuthFromLocalSession}>
         {children}
       </ConvexProviderWithAuth>
-    </AuthKitProvider>
+    </LocalAuthProvider>
   );
 }
 
-function useAuthFromWorkos() {
-  const { user, loading: isLoading } = useWorkosAuth();
-  const { refresh, getAccessToken } = useAccessToken();
+function useAuthFromLocalSession() {
+  const { user, loading: isLoading } = useLocalAuth();
 
-  // Keep Convex's auth provider state tied to the stable WorkOS session only.
+  // Keep Convex's auth provider state tied to the stable local session only.
   // Token fetch/refresh loading is handled inside fetchAccessToken; exposing it
   // here makes Convex reset auth on every token refresh, which causes UI flicker.
   const loading = isLoading ?? false;
   const authenticated = !!user;
 
   const fetchAccessToken = useCallback(
-    async ({ forceRefreshToken }: { forceRefreshToken: boolean }) => {
+    async (_options: { forceRefreshToken: boolean }) => {
       try {
-        const token = forceRefreshToken
-          ? await refresh()
-          : await getAccessToken();
-        return token ?? null;
+        const response = await fetch("/api/auth/token", { cache: "no-store" });
+        if (!response.ok) return null;
+        const data = await response.json();
+        return typeof data.token === "string" ? data.token : null;
       } catch {
         return null;
       }
     },
-    [getAccessToken, refresh]
+    []
   );
 
   return {

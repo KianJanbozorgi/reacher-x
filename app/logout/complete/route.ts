@@ -1,20 +1,14 @@
-import { signOut } from "@workos-inc/authkit-nextjs";
-import { useLogger, withEvlog } from "@/shared/lib/logging/next";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import { revokeSession, SESSION_COOKIE } from "@/shared/lib/localAuth/session";
 
-export const POST = withEvlog(async () => {
-  const log = useLogger();
-  log.set({
-    auth: {
-      action: "logout",
-      provider: "workos",
-    },
-    operation: "logout_route",
-  });
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!siteUrl) {
-    throw new Error("NEXT_PUBLIC_SITE_URL is required for logout redirects.");
-  }
-
-  await signOut({ returnTo: new URL("/", siteUrl).toString() });
-});
+export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
+  if (!origin || origin !== new URL(process.env.NEXT_PUBLIC_SITE_URL || request.url).origin)
+    return new NextResponse("Invalid origin", { status: 403 });
+  const jar = await cookies();
+  revokeSession(jar.get(SESSION_COOKIE)?.value);
+  const response = NextResponse.redirect(new URL("/login", request.url), 303);
+  response.cookies.delete(SESSION_COOKIE);
+  return response;
+}

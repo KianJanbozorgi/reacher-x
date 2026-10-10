@@ -1,5 +1,5 @@
 import { useConvexAuth } from "convex/react";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { api } from "../../convex/_generated/api";
 import { useMemo } from "react";
 import { getWorkspaceUseCase } from "../lib/workspaceUseCases";
@@ -22,7 +22,7 @@ import { useViewerUserRecord } from "./useViewerUserRecord";
 export function useAuth() {
   const { isLoading: convexLoading, isAuthenticated: convexAuthenticated } =
     useConvexAuth();
-  const { user: workosUser, loading: workosLoading } = useWorkosAuth();
+  const { user: localUser, loading: localAuthLoading } = useLocalAuth();
   const { currentUser, currentUserQuery, isProvisioning } =
     useViewerUserRecord();
 
@@ -37,7 +37,7 @@ export function useAuth() {
   const isAuthenticated = useMemo(() => {
     return (
       convexAuthenticated &&
-      !!workosUser &&
+      !!localUser &&
       currentUserQuery.isSuccess &&
       !!currentUser
     );
@@ -45,13 +45,13 @@ export function useAuth() {
     convexAuthenticated,
     currentUser,
     currentUserQuery.isSuccess,
-    workosUser,
+    localUser,
   ]);
 
   const isLoading = useMemo(() => {
     return (
       convexLoading ||
-      workosLoading ||
+      localAuthLoading ||
       isProvisioning ||
       (!!currentUser && workspaceQuery.isPending)
     );
@@ -59,7 +59,7 @@ export function useAuth() {
     convexLoading,
     currentUser,
     isProvisioning,
-    workosLoading,
+    localAuthLoading,
     workspaceQuery.isPending,
   ]);
 
@@ -73,7 +73,7 @@ export function useAuth() {
     isAuthenticated,
     isLoading,
     error,
-    user: workosUser,
+    user: localUser,
     userId: currentUser?._id || null,
     workspace,
     workspaceUseCase,

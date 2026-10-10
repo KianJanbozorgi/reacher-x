@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth } from "@/shared/lib/localAuth/client";
 import { useMutation } from "convex/react";
 import { toast } from "sonner";
 

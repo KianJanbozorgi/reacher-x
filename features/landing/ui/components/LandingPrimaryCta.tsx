@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { MouseEventHandler } from "react";
 import type { VariantProps } from "class-variance-authority";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth } from "@/shared/lib/localAuth/client";
 import { cn } from "@/shared/lib/utils";
 import {
   type AuthRouteHref,
@@ -36,7 +36,7 @@ export function LandingPrimaryCta({
     className
   );
 
-  // AuthKit resolves the session asynchronously. Never guess that a loading
+  // The server resolves the session asynchronously. Never guess that a loading
   // user is anonymous: an external OAuth redirect during Convex provisioning
   // can trigger Convex's native "unsaved changes" unload warning.
   if (loading) {

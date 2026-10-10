@@ -1,7 +1,7 @@
 "use client";
 
 import { useConvexAuth } from "convex/react";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { api } from "@/convex/_generated/api";
 import {
   PageHeader,
@@ -18,7 +18,7 @@ import { TextShimmer } from "@/shared/ui/components/TextShimmer";
 
 export default function ConnectedAccountsPage() {
   const { isAuthenticated, isLoading: convexLoading } = useConvexAuth();
-  const { user, loading: workosLoading } = useWorkosAuth();
+  const { user, loading: localAuthLoading } = useLocalAuth();
 
   const callbackUrl =
     typeof window === "undefined"
@@ -59,7 +59,7 @@ export default function ConnectedAccountsPage() {
 
   const pageLoading =
     convexLoading ||
-    workosLoading ||
+    localAuthLoading ||
     (isAuthenticated && currentUserQuery.isPending) ||
     xStatusLoading;
   const isUpdatingAccount = xIsMutating;

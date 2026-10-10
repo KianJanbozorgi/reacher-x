@@ -12,7 +12,7 @@ const auth = vi.hoisted(() => ({
   user: null as null | { id: string },
   loading: false,
 }));
-vi.mock("@workos-inc/authkit-nextjs/components", () => ({
+vi.mock("@/shared/lib/localAuth/client", () => ({
   useAuth: () => auth,
 }));
 vi.mock("next/link", () => ({

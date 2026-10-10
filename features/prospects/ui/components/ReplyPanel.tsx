@@ -9,7 +9,7 @@
 import * as React from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { useConvexAuth } from "convex/react";
 import { useViewerXComposerIdentity } from "@/features/composer/hooks/useViewerXComposerIdentity";
 import { useRouter } from "next/navigation";
@@ -60,7 +60,7 @@ export function ReplyPanel({
   const { popPanel } = usePanelStack();
   const replyToPost = useAction(api.x.replyToPost);
   const { isAuthenticated, isLoading: convexLoading } = useConvexAuth();
-  const { loading: workosLoading } = useWorkosAuth();
+  const { loading: localAuthLoading } = useLocalAuth();
 
   const {
     connectionStatus,
@@ -69,7 +69,7 @@ export function ReplyPanel({
     currentUser: composerCurrentUser,
   } = useViewerXComposerIdentity({ enabled: isAuthenticated });
 
-  const authLoading = convexLoading || workosLoading;
+  const authLoading = convexLoading || localAuthLoading;
   const accountLoading = isAuthenticated && connectionLoading;
 
   return (

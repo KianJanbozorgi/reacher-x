@@ -2,7 +2,7 @@
 
 import { useAction } from "convex/react";
 import { useConvexAuth } from "convex/react";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/convex/_generated/api";
 import {
@@ -18,14 +18,14 @@ export interface UseViewerXComposerIdentityOptions {
 
 /**
  * Loads `getTwitterConnectionStatus` and builds the composer header user:
- * X profile first, WorkOS fallback (same merge rule as reply/post pages).
+ * X profile first, local account fallback (same merge rule as reply/post pages).
  */
 export function useViewerXComposerIdentity(
   options: UseViewerXComposerIdentityOptions = {}
 ) {
   const { enabled = true } = options;
   const { isAuthenticated, isLoading: convexAuthLoading } = useConvexAuth();
-  const { user } = useWorkosAuth();
+  const { user } = useLocalAuth();
   const getStatus = useAction(api.x.getTwitterConnectionStatus);
   const getStatusRef = useRef(getStatus);
   useEffect(() => {

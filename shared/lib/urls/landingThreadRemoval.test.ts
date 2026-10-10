@@ -1,277 +1,49 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
-import { NextRequest, NextResponse } from "next/server";
+import { beforeEach, expect, test, vi } from "vitest";
+import { NextRequest } from "next/server";
 import { proxy } from "../../../proxy";
-import sitemap from "../../../app/sitemap";
-import nextConfig from "../../../next.config.mjs";
 
-const mocks = vi.hoisted(() => ({
-  authkit: vi.fn(),
-  handleAuthkitProxy: vi.fn(),
-}));
-vi.mock("@workos-inc/authkit-nextjs", () => ({
-  ...mocks,
-  partitionAuthkitHeaders: () => ({
-    requestHeaders: new Headers(),
-    responseHeaders: new Headers(),
-  }),
-  applyResponseHeaders: (response: Response) => response,
+const auth = vi.hoisted(() => ({ account: null as null | { email: string } }));
+vi.mock("@/shared/lib/localAuth/session", () => ({
+  SESSION_COOKIE: "rx_session",
+  accountForSession: () => auth.account,
 }));
 
 beforeEach(() => {
-  vi.clearAllMocks();
-  mocks.handleAuthkitProxy.mockImplementation(() => NextResponse.next());
-  mocks.authkit.mockResolvedValue({
-    session: { user: null },
-    headers: new Headers(),
-    authorizationUrl: "https://auth.example/sign-in",
-  });
+  auth.account = null;
+  process.env.PRIVATE_ALLOWED_EMAILS = "tester@example.test";
 });
 
-describe("routing after public thread removal", () => {
-  test("sitemap has no thread entries and performs no backend requests", async () => {
-    const fetchMock = vi.spyOn(globalThis, "fetch");
-    try {
-      const entries = await sitemap();
-      expect(entries.map((entry) => entry.url)).toEqual(
-        expect.arrayContaining([
-          "https://reacherx.com/home",
-          "https://reacherx.com/pricing",
-          "https://reacherx.com/blog",
-        ])
-      );
-      expect(
-        entries.some(
-          (entry) =>
-            entry.url.includes("/threads") || entry.url.includes("/preview")
-        )
-      ).toBe(false);
-      expect(fetchMock).not.toHaveBeenCalled();
-    } finally {
-      fetchMock.mockRestore();
-    }
-  });
-
-  test("legacy redirects do not send visitors to removed thread pages", async () => {
-    const redirects = await nextConfig.redirects!();
-    expect(
-      redirects.some(
-        (redirect) =>
-          redirect.source.includes("threads") ||
-          redirect.destination.includes("threads")
-      )
-    ).toBe(false);
-    expect(
-      redirects.some((r) => /\/home\/(?:v\d+|preview)/.test(r.source))
-    ).toBe(false);
-    expect(redirects).toContainEqual({
-      source: "/home/pricing",
-      destination: "/pricing",
-      permanent: true,
-    });
-  });
-
-  test.each(["/login", "/signup", "/callback"])(
-    "preserves public access to %s through the AuthKit proxy",
-    async (path) => {
-      const request = new NextRequest(`https://reacherx.com${path}`);
-      await proxy(request);
-      expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-        request,
-        expect.any(Headers)
-      );
-    }
-  );
-
-  test.each(["/home", "/pricing", "/login", "/signup", "/callback"])(
-    "preserves public access to %s through the AuthKit proxy",
-    async (path) => {
-      const request = new NextRequest(`https://reacherx.com${path}`);
-      await proxy(request);
-      expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-        request,
-        expect.any(Headers)
-      );
-    }
-  );
-
-  test.each([
-    "/markdown/blog",
-    "/blog/feed.xml",
-    "/blog/some-post/markdown",
-    "/api/describe-url",
-  ])("serves %s without AuthKit session work", async (path) => {
-    const request = new NextRequest(`https://reacherx.com${path}`);
-    const response = await proxy(request);
-    expect(mocks.handleAuthkitProxy).not.toHaveBeenCalled();
-    expect(mocks.authkit).not.toHaveBeenCalled();
-    expect(response.headers.get("location")).toBeNull();
-    expect(response.headers.has("x-middleware-rewrite")).toBe(false);
-  });
-
-  test("blog pages advertise Markdown without Vary", async () => {
-    const request = new NextRequest("https://reacherx.com/blog", {
-      headers: { Accept: "text/markdown" },
-    });
-    const response = await proxy(request);
-    expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-      request,
-      expect.any(Headers)
-    );
-    expect(response.headers.get("vary")).toBeNull();
-    expect(response.headers.get("link")).toContain('type="text/markdown"');
-  });
-
-  test("unknown blog slugs return the blog 404", async () => {
-    const response = await proxy(
-      new NextRequest("https://reacherx.com/blog/not-a-post")
-    );
+test.each(["/home", "/pricing", "/blog", "/demo", "/post/linkedin/123"])(
+  "retired public route %s stays hidden",
+  async (path) => {
+    const response = await proxy(new NextRequest(`https://app.example.test${path}`));
     expect(response.status).toBe(404);
-    expect(await response.text()).toContain("Back to blog");
-  });
+  }
+);
 
-  test.each([
-    "/threads",
-    "/threads/123",
-    "/threads/123/nested",
-    "/agent/setup",
-  ])("applies the existing protected-path policy to %s", async (path) => {
-    const request = new NextRequest(`https://reacherx.com${path}`);
-    await proxy(request);
-    expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-      request,
-      expect.any(Headers),
-      { redirect: "https://auth.example/sign-in" }
-    );
-  });
-
-  test("authenticated retired URLs pass through to Next's missing-route handling", async () => {
-    mocks.authkit.mockResolvedValue({
-      session: { user: { id: "test-user" } },
-      headers: new Headers(),
-    });
-    const request = new NextRequest("https://reacherx.com/threads/123");
-    await proxy(request);
-    expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-      request,
-      expect.any(Headers)
-    );
-  });
-
-  test("anonymous homepage redirects preserve query parameters", async () => {
-    const request = new NextRequest("https://reacherx.com/?utm_source=test");
-    await proxy(request);
-    expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-      request,
-      expect.any(Headers),
-      { redirect: new URL("https://reacherx.com/home?utm_source=test") }
-    );
-  });
-});
-
-describe("marketing routes reject invalid and retired paths before streaming", () => {
-  test.each([
-    "/product",
-    "/use-cases",
-    "/use-cases/investors",
-    "/use-cases/not-real",
-    "/use-cases/customers/extra",
-    "/use-cases/__proto__",
-    "/use-cases/missing.png",
-    "/home/v0",
-    "/home/v2",
-    "/home/v2/nested",
-    "/home/preview",
-    "/home/preview/network",
-    "/home/preview/missing",
-    "/home/preview/describe",
-    "/home/preview/goals",
-    "/home/preview/describe/extra",
-  ])("returns a real 404 for %s", async (path) => {
-    const response = await proxy(
-      new NextRequest(`https://reacherx.com${path}`)
-    );
-    expect(response.status).toBe(404);
-    expect(response.headers.get("x-robots-tag")).toBe("noindex");
-    expect(await response.text()).toContain("Back to home");
-    expect(mocks.handleAuthkitProxy).not.toHaveBeenCalled();
-  });
-});
-
-test("authenticated root still opens the dashboard", async () => {
-  mocks.authkit.mockResolvedValue({
-    session: { user: { id: "test-user" } },
-    headers: new Headers(),
-  });
-  const request = new NextRequest("https://reacherx.com/");
-  await proxy(request);
-  expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-    request,
-    expect.any(Headers)
-  );
-});
-
-test("retired homepage variants also return 404 when authenticated", async () => {
-  mocks.authkit.mockResolvedValue({
-    session: { user: { id: "test-user" } },
-    headers: new Headers(),
-  });
-  for (const path of [
-    "/home/v0",
-    "/home/v2",
-    "/home/preview",
-    "/home/preview/network",
-  ]) {
-    const response = await proxy(
-      new NextRequest(`https://reacherx.com${path}`)
-    );
-    expect(response.status).toBe(404);
+test.each(["/login", "/signup", "/forgot-password", "/reset-password", "/api/auth/login"])(
+  "local auth route %s is reachable without a session",
+  async (path) => {
+    const response = await proxy(new NextRequest(`https://app.example.test${path}`));
     expect(response.headers.get("location")).toBeNull();
   }
+);
+
+test("private routes redirect anonymous visitors to local login", async () => {
+  const response = await proxy(new NextRequest("https://app.example.test/agent/setup"));
+  expect(response.status).toBe(307);
+  expect(response.headers.get("location")).toBe("https://app.example.test/login?returnTo=%2Fagent%2Fsetup");
 });
 
-describe("agent readiness without per-Accept negotiation", () => {
-  test.each(["/home", "/pricing", "/blog"])(
-    "keeps %s on HTML with a Markdown alternate link",
-    async (path) => {
-      const response = await proxy(
-        new NextRequest(`https://reacherx.com${path}?utm_source=qa`, {
-          headers: { Accept: "text/markdown" },
-        })
-      );
-      expect(response.headers.has("x-middleware-rewrite")).toBe(false);
-      expect(response.headers.get("vary")).toBeNull();
-      expect(response.headers.get("link")).toContain(
-        `</markdown${path}>; rel="alternate"; type="text/markdown"`
-      );
-    }
-  );
-  test.each<{ method: string; headers: Record<string, string> }>([
-    { method: "GET", headers: { Accept: "text/markdown", RSC: "1" } },
-    { method: "POST", headers: { Accept: "text/markdown" } },
-    {
-      method: "POST",
-      headers: { Accept: "text/markdown", "next-action": "action-id" },
-    },
-  ])("preserves RSC and server-action requests: %j", async (init) => {
-    const response = await proxy(
-      new NextRequest("https://reacherx.com/home", init)
-    );
-    expect(response.headers.has("x-middleware-rewrite")).toBe(false);
-  });
-  test("authenticated root remains the app when Markdown is requested", async () => {
-    mocks.authkit.mockResolvedValue({
-      session: { user: { id: "test-user" } },
-      headers: new Headers(),
-    });
-    const response = await proxy(
-      new NextRequest("https://reacherx.com/", {
-        headers: { Accept: "text/markdown" },
-      })
-    );
-    expect(response.headers.has("x-middleware-rewrite")).toBe(false);
-    expect(mocks.handleAuthkitProxy).toHaveBeenCalledWith(
-      expect.any(NextRequest),
-      expect.any(Headers)
-    );
-  });
+test("allowed local accounts can access the application", async () => {
+  auth.account = { email: "tester@example.test" };
+  const response = await proxy(new NextRequest("https://app.example.test/agent"));
+  expect(response.status).toBe(200);
+  expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
+});
+
+test("accounts removed from the allowlist lose access", async () => {
+  auth.account = { email: "other@example.test" };
+  const response = await proxy(new NextRequest("https://app.example.test/agent"));
+  expect(response.status).toBe(403);
 });

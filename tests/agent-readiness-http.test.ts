@@ -161,7 +161,7 @@ test("invalid Markdown paths cannot expose private routes, drafts or source file
     assert.equal(response.status, 404, path);
     assert.doesNotMatch(
       await response.text(),
-      /WORKOS_API_KEY|private draft|NEXT_PUBLIC_CONVEX_URL/
+      /AUTH_JWT_PRIVATE_KEY|AUTH_INVITE_CODE|private draft|NEXT_PUBLIC_CONVEX_URL/
     );
   }
   for (const path of ["/agent/setup", "/settings", "/threads"]) {

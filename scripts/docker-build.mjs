@@ -6,9 +6,6 @@ import { parseEnv } from "node:util";
 // server values needed while Next.js prerenders; never copy it into the image.
 const values = parseEnv(readFileSync("/run/secrets/app_env", "utf8"));
 for (const key of [
-  "WORKOS_CLIENT_ID",
-  "WORKOS_API_KEY",
-  "WORKOS_COOKIE_PASSWORD",
   "PRIVATE_ALLOWED_EMAILS",
 ]) {
   if (!values[key]) throw new Error(`Set ${key} in the Docker Compose .env file.`);
@@ -17,7 +14,6 @@ for (const key of [
 for (const key of [
   "NEXT_PUBLIC_CONVEX_URL",
   "NEXT_PUBLIC_SITE_URL",
-  "NEXT_PUBLIC_WORKOS_REDIRECT_URI",
 ]) {
   if (!process.env[key]) throw new Error(`Set ${key} in the Docker Compose .env file.`);
 }

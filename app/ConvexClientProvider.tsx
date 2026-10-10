@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { withAuth } from "@workos-inc/authkit-nextjs";
+import { currentAccount } from "@/shared/lib/localAuth/session";
 import { ConvexClientProviderClient } from "./ConvexClientProviderClient";
 
 export async function ConvexClientProvider({
@@ -7,7 +7,9 @@ export async function ConvexClientProvider({
 }: {
   children: ReactNode;
 }) {
-  const { accessToken: _accessToken, ...initialAuth } = await withAuth();
+  const account = await currentAccount();
+  const initialAuth = account ? { id: account.id, email: account.email,
+    firstName: account.first_name, lastName: account.last_name, profilePictureUrl: null } : null;
 
   return (
     <ConvexClientProviderClient initialAuth={initialAuth}>

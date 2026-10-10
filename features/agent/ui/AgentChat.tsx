@@ -20,7 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth } from "@/shared/lib/localAuth/client";
 import {
   extractAssistantReasoning,
   extractAssistantReasoningSteps,
@@ -2384,7 +2384,7 @@ export function AgentChat({
 }: AgentChatProps) {
   const router = useRouter();
   const pathname = usePathname();
-  // Get WorkOS auth user for profile image (same as Header)
+  // Get local auth user for profile image (same as Header)
   const { user: authUser } = useAuth();
   const { workspace: currentWorkspace, isLoading: isWorkspaceLoading } =
     useWorkspace();
@@ -3417,7 +3417,7 @@ export function AgentChat({
     onEffectiveThreadIdChange(effectiveThreadId);
   }, [effectiveThreadId, onEffectiveThreadIdChange]);
 
-  // Get user display info from WorkOS auth
+  // Get user display info from local auth
   const userDisplayImage = authUser?.profilePictureUrl;
   const userDisplayName = authUser?.firstName || authUser?.email || "User";
   const composerDisplayAttachments = useMemo(

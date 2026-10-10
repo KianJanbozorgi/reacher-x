@@ -204,9 +204,6 @@ importers:
       "@vercel/speed-insights":
         specifier: ^2.0.0
         version: 2.0.0(next@16.2.9(@babel/core@7.29.7)(@opentelemetry/api@1.9.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
-      "@workos-inc/authkit-nextjs":
-        specifier: ^4.1.1
-        version: 4.1.1(next@16.2.9(@babel/core@7.29.7)(@opentelemetry/api@1.9.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3)
       "@xdevplatform/chat-xdk":
         specifier: 0.5.0
         version: 0.5.0(patch_hash=65e666f277ac8bb60e3afc03d19c55bd20dd3fbb5255cee7aa9cc20ad19fc148)(juicebox-sdk@0.3.0)

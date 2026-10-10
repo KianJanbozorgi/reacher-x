@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation } from "convex/react";
 import { useConvexAuth } from "convex/react";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
@@ -26,7 +26,7 @@ export function ConnectionsStep({
   const [isCompletingStep, setIsCompletingStep] = useState(false);
   const completionSessionIdRef = useRef<string | null>(null);
   const { isAuthenticated, isLoading: convexLoading } = useConvexAuth();
-  const { user, loading: workosLoading } = useWorkosAuth();
+  const { user, loading: localAuthLoading } = useLocalAuth();
 
   const currentUserQuery = useQueryWithStatus(
     api.users.getCurrentUser,
@@ -47,7 +47,7 @@ export function ConnectionsStep({
 
   const pageLoading =
     convexLoading ||
-    workosLoading ||
+    localAuthLoading ||
     (isAuthenticated && currentUserQuery.isPending) ||
     (accountsEnabled && xQuery.isPending);
   const statusError = [xQuery.error?.message]

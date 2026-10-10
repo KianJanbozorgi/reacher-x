@@ -3,7 +3,7 @@
 import { useRouter, useParams } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { useAction, useConvexAuth } from "convex/react";
-import { useAuth as useWorkosAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth as useLocalAuth } from "@/shared/lib/localAuth/client";
 import { api } from "@/convex/_generated/api";
 import {
   DESKTOP_PANEL_BORDER_CLASS_NAME,
@@ -40,7 +40,7 @@ function PostDetailInner() {
   const tweetId = params.id;
 
   const { isAuthenticated, isLoading: convexLoading } = useConvexAuth();
-  const { loading: workosLoading } = useWorkosAuth();
+  const { loading: localAuthLoading } = useLocalAuth();
   const replyToPost = useAction(api.x.replyToPost);
   const { openProfile } = useProfile();
   const isMobile = useIsMobile();
@@ -105,7 +105,7 @@ function PostDetailInner() {
     [loadTweet, replyToPost, tweetId, tweet?.user?.id_str]
   );
 
-  const authLoading = convexLoading || workosLoading;
+  const authLoading = convexLoading || localAuthLoading;
   const accountLoading = isAuthenticated && connectionLoading;
   const shouldShowThread = isAuthenticated && !!connectionStatus?.isConnected;
 

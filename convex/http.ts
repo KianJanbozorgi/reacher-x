@@ -16,6 +16,21 @@ import {
 
 const http = httpRouter();
 
+http.route({
+  path: "/auth/jwks",
+  method: "GET",
+  handler: httpAction(async () => {
+    const raw = process.env.AUTH_JWT_PUBLIC_JWK;
+    if (!raw) return new Response("Authentication key unavailable", { status: 503 });
+    const key = JSON.parse(raw) as Record<string, unknown>;
+    if (key.kty !== "RSA" || key.alg !== "RS256" || typeof key.n !== "string" || typeof key.e !== "string")
+      return new Response("Invalid authentication key", { status: 503 });
+    return new Response(JSON.stringify({ keys: [key] }), {
+      headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
+    });
+  }),
+});
+
 function withLoggedHttpAction(
   operation: string,
   handler: (ctx: any, request: Request) => Promise<Response>

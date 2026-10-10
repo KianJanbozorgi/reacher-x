@@ -9,7 +9,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { useMutation } from "convex/react";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useAuth } from "@/shared/lib/localAuth/client";
 
 import { cn } from "@/shared/lib/utils";
 import { logout } from "@/shared/lib/auth/logout";
