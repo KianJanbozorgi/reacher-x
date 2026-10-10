@@ -73,16 +73,16 @@ SocialAPI.tech برای جست‌وجو/تایم‌لاین/رشته cursor مس
 
 ## ۷. راه‌اندازی و استقرار روی سرور
 
-**پیش‌نیازها:** سرور با Docker Compose، Node.js 24 و pnpm 11 برای ساخت، دامنه و DNS، باز بودن پورت‌های ۸۰ و ۴۴۳، برنامهٔ WorkOS، استقرار **production** در Convex و کلیدهای سرویس‌ها. استقرار Convex توسعه‌ای که برای آزمون این پروژه استفاده شد، پایگاه دادهٔ تولید نیست.
+**پیش‌نیازها:** سرور با Docker Compose، دامنه و DNS، باز بودن پورت‌های ۸۰ و ۴۴۳، برنامهٔ WorkOS، استقرار **production** در Convex و کلیدهای سرویس‌ها. نصب Node.js و pnpm روی خود سرور وب لازم نیست؛ Docker وابستگی‌ها را نصب و برنامه را می‌سازد. برای فرمان جداگانهٔ استقرار Convex، Node.js 24 و pnpm 11 روی رایانهٔ مسئول بک‌اند یا CI لازم‌اند. استقرار Convex توسعه‌ای که برای آزمون این پروژه استفاده شد، پایگاه دادهٔ تولید نیست.
 
-1. شاخهٔ `codex/twitter-private-hiknow` را از GitHub دریافت و `pnpm install --frozen-lockfile` اجرا کنید.
-2. از `.env.example` فایل خصوصی `.env.local` بسازید. در آن `APP_DOMAIN=HOSTNAME`، `NEXT_PUBLIC_SITE_URL=https://HOSTNAME`، `NEXT_PUBLIC_WORKOS_REDIRECT_URI=https://HOSTNAME/callback`، `NEXT_PUBLIC_CONVEX_URL` تولید، `WORKOS_CLIENT_ID`، `WORKOS_API_KEY`، `WORKOS_COOKIE_PASSWORD` و `PRIVATE_ALLOWED_EMAILS=kian84.c16@gmail.com` را تنظیم کنید. فایل را commit نکنید.
+1. شاخهٔ `codex/twitter-private-hiknow` را از GitHub روی سرور دریافت کنید.
+2. از `.env.example` فایل خصوصی `.env` بسازید؛ Compose آن را خودکار می‌خواند. در آن `APP_DOMAIN=HOSTNAME`، `APP_BIND_IP=127.0.0.1`، `NEXT_PUBLIC_SITE_URL=https://HOSTNAME`، `NEXT_PUBLIC_WORKOS_REDIRECT_URI=https://HOSTNAME/callback`، `NEXT_PUBLIC_CONVEX_URL` تولید، `WORKOS_CLIENT_ID`، `WORKOS_API_KEY`، `WORKOS_COOKIE_PASSWORD` و `PRIVATE_ALLOWED_EMAILS=kian84.c16@gmail.com` را تنظیم کنید. فایل را commit نکنید.
 3. در **محیط Convex تولید**، `WORKOS_CLIENT_ID`، `PRIVATE_ALLOWED_EMAILS`، `HIKNOW_API_KEY`، `SOCIALAPI_API_KEY`، اعتبارنامه‌های X (`X_API_CLIENT_ID`، `X_API_CLIENT_SECRET`، `X_API_BEARER_TOKEN`، `X_CONSUMER_SECRET`، `X_TOKEN_ENCRYPTION_KEY`) و `PROSPECTING_AUTO_RESCHEDULE=0` را ثبت کنید. `EXA_API_KEY` فقط برای پژوهش وب اختیاری است. کلیدهای محرمانه را با پیشوند `NEXT_PUBLIC_` منتشر نکنید.
-4. آدرس callback برابر `https://HOSTNAME/callback` را در WorkOS ثبت کنید. `CONVEX_DEPLOY_KEY` تولید را فقط در محیط امن shell/CI بگذارید و `pnpm exec convex deploy` اجرا کنید. آدرس Convex خروجی را با `.env.local` تطبیق دهید.
-5. `pnpm build` و سپس `docker compose --env-file .env.local -f compose.yaml -f compose.production.yaml up --build -d` را اجرا کنید. Caddy گواهی HTTPS می‌گیرد و به کانتینر `app:3000` وصل می‌شود.
+4. آدرس callback برابر `https://HOSTNAME/callback` را در WorkOS ثبت کنید. `CONVEX_DEPLOY_KEY` تولید را فقط در محیط امن shell/CI بگذارید و `pnpm exec convex deploy` اجرا کنید. آدرس Convex خروجی را با `.env` تطبیق دهید.
+5. روی سرور فقط `docker compose -f compose.yaml -f compose.production.yaml up --build -d` را اجرا کنید؛ ساخت Next.js و بسته‌ها داخل Docker انجام می‌شود. Caddy گواهی HTTPS می‌گیرد و به کانتینر `app:3000` وصل می‌شود.
 6. وضعیت کانتینرها و لاگ‌ها را بررسی کنید؛ با ایمیل مجاز وارد شوید، onboarding را انجام دهید، یک جست‌وجوی کوچک اجرا کنید و ذخیره/نمایش پست را با تازه‌سازی صفحه تأیید کنید. در صورت نیاز به اقدام اجتماعی، اتصال حساب X را جداگانه بیازمایید.
 
-متغیرهای `NEXT_PUBLIC_*` هنگام **ساخت** Next.js هم لازم‌اند؛ تغییر دامنه یا URL تولید Convex به ساخت دوبارهٔ frontend نیاز دارد. `localhost` روی سرور، آدرس مرورگر رایانهٔ کاربر نیست. دسترسی کاربر از آدرس HTTPS دامنه انجام می‌شود. راهنمای گام‌به‌گام انگلیسی در `DEPLOYMENT_HANDOFF.md` و `README.md` است.
+متغیرهای `NEXT_PUBLIC_*` هنگام **ساخت داخل Docker** هم لازم‌اند و از `.env` به فرایند ساخت داده می‌شوند؛ تغییر دامنه یا URL تولید Convex به `docker compose up --build -d` دوباره نیاز دارد. برای اجرای مستقیم روی پورت سرور، بدون فایل Caddy، `APP_PORT` و `APP_BIND_IP=0.0.0.0` را در `.env` بگذارید و `docker compose up --build -d` اجرا کنید؛ آدرس callback عمومی WorkOS باید با همان نشانی هماهنگ باشد و HTTPS برای انتشار عمومی توصیه می‌شود. `localhost` روی سرور، آدرس مرورگر رایانهٔ کاربر نیست. دسترسی کاربر از آدرس HTTPS دامنه انجام می‌شود. راهنمای گام‌به‌گام انگلیسی در `DEPLOYMENT_HANDOFF.md` و `README.md` است.
 
 ## ۸. هزینه‌ها و روش برآورد
 

@@ -12,14 +12,14 @@ Code: `KianJanbozorgi/reacher-x`, branch `codex/twitter-private-hiknow`, commit 
 
 ## Supervisor: provision and deploy
 
-1. Install Docker with Compose, Node.js 24, and pnpm 11 on the build host. Point `HOSTNAME` at the server and allow inbound TCP 80/443.
-2. Clone the repository and switch to `codex/twitter-private-hiknow`. Run `pnpm install --frozen-lockfile`.
-3. Create `.env.local` from `.env.example` on the build host. Set `APP_DOMAIN=HOSTNAME`, `NEXT_PUBLIC_SITE_URL=https://HOSTNAME`, `NEXT_PUBLIC_WORKOS_REDIRECT_URI=https://HOSTNAME/callback`, `NEXT_PUBLIC_CONVEX_URL` to the **production** Convex URL, the WorkOS client ID/API key/cookie password, and `PRIVATE_ALLOWED_EMAILS=kian84.c16@gmail.com`. Keep `.env.local` private. Register the identical callback URI in WorkOS.
+1. Install Docker with Compose on the server. Point `HOSTNAME` at the server and allow inbound TCP 80/443. Docker installs pnpm dependencies and builds Next.js inside the image; the frontend needs no host-side Node.js or build artifacts.
+2. Clone the repository and switch to `codex/twitter-private-hiknow`.
+3. Create git-ignored `.env` from `.env.example` on the server. Set `APP_DOMAIN=HOSTNAME`, `APP_BIND_IP=127.0.0.1`, `NEXT_PUBLIC_SITE_URL=https://HOSTNAME`, `NEXT_PUBLIC_WORKOS_REDIRECT_URI=https://HOSTNAME/callback`, `NEXT_PUBLIC_CONVEX_URL` to the **production** Convex URL, the WorkOS client ID/API key/cookie password, and `PRIVATE_ALLOWED_EMAILS=kian84.c16@gmail.com`. Keep `.env` private. Register the identical callback URI in WorkOS.
 4. Configure the Convex production deployment with `WORKOS_CLIENT_ID`, `PRIVATE_ALLOWED_EMAILS`, `HIKNOW_API_KEY`, `SOCIALAPI_API_KEY`, `X_API_CLIENT_ID`, `X_API_CLIENT_SECRET`, `X_API_BEARER_TOKEN`, `X_CONSUMER_SECRET`, `X_TOKEN_ENCRYPTION_KEY`, and `PROSPECTING_AUTO_RESCHEDULE=0`. See `README.md` for what each one does. `HIKNOW_BASE_URL` is optional. Do not expose backend keys as `NEXT_PUBLIC_*` variables.
-5. Set `CONVEX_DEPLOY_KEY` in the supervisor's secure shell/CI environment for the production deployment and run `pnpm exec convex deploy`. Verify the resulting Convex URL matches `.env.local`.
-6. Run `pnpm build`, then `docker compose --env-file .env.local -f compose.yaml -f compose.production.yaml up --build -d`. Check `docker compose --env-file .env.local -f compose.yaml -f compose.production.yaml ps` and open `https://HOSTNAME`. Caddy obtains the TLS certificate automatically.
+5. Set `CONVEX_DEPLOY_KEY` in a secure shell/CI environment for the production deployment and run `pnpm exec convex deploy` there (Node.js 24 and pnpm 11 are needed only on that backend deployment machine). Verify the resulting Convex URL matches `.env`.
+6. On the Docker server run `docker compose -f compose.yaml -f compose.production.yaml up --build -d`. Check `docker compose -f compose.yaml -f compose.production.yaml ps` and open `https://HOSTNAME`. Caddy obtains the TLS certificate automatically.
 
-The frontend is a Docker container; Convex is a managed external backend. The current Compose file binds the app's port 3000 to the server loopback, while Caddy exposes HTTPS on 443. Keep DNS, firewall, Docker and WorkOS callback aligned on the same hostname.
+The frontend is a Docker container; Convex is a managed external backend. `APP_BIND_IP=127.0.0.1` keeps the app's port on server loopback while Caddy exposes HTTPS on 443. For a direct server-port deployment, omit the Caddy overlay, set `APP_PORT` and `APP_BIND_IP=0.0.0.0` in `.env`, then run `docker compose up --build -d`. WorkOS must allow the resulting public callback URL; HTTPS is recommended. Keep DNS, firewall, Docker and WorkOS callback aligned on the same address.
 
 ## Acceptance check after first sign-in
 

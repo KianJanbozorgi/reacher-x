@@ -3,6 +3,10 @@
 .env.*
 !.env.example
 node_modules
+.next
+.pnpm
 .pnpm-store
 .codex-tmp
+artifacts
+coverage
 *.tsbuildinfo
